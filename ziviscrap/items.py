@@ -6,8 +6,6 @@
 from scrapy.item import Item, Field
 
 class WorkSpecItem(Item):
-    # define the fields for your item here like:
-    # name = Field()
     shortname = Field()
     phid = Field()
     url = Field()
