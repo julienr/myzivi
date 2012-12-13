@@ -1,4 +1,5 @@
 import urllib2
+import urllib
 import bs4
 import re
 import collections
@@ -25,3 +26,38 @@ for a in workspec_a:
 
     workspecs.append(WorkSpec(shortname=shortname, phid=phid))
 
+# Pagination tests
+url = "https://www.eis.zivi.admin.ch/ZiviEis/ModuleDisplayPage.aspx?functionId=123F61E5-F417-4F51-AC59-906D6F999D02"
+html = urllib2.urlopen(url).read()
+with open('out.html', 'w') as f:
+    f.write(html)
+
+data = {
+    'ctl00$cphContent$ctl04$workSpecificationList$workSpecificationPagingBar$pageSizeValue':100,
+    'ctl00$cphContent$ctl04$workSpecificationList$workSpecificationPagingBar$currentPageValue':5
+}
+html = urllib2.urlopen(url, data=urllib.urlencode(data)).read()
+with open('outdata.html', 'w') as f:
+    f.write(html)
+
+#
+form = soup('form')[0]
+inputs = form.find_all('input')
+## Only keep key-value inputs
+kvinputs = filter(lambda ipt: 'value' in ipt.attrs, inputs)
+data = {ipt['name']:ipt['value'].encode('utf-8') for ipt in kvinputs}
+data['ctl00$cphContent$ctl04$workSpecificationList$workSpecificationPagingBar$pageSizeValue'] = 100
+data['ctl00$cphContent$ctl04$workSpecificationList$workSpecificationPagingBar$currentPageValue'] = 1
+html = urllib2.urlopen(url, data=urllib.urlencode(data)).read()
+with open('outinput.html', 'w') as f:
+    f.write(html)
+##
+
+def data_from_soup(soup):
+    form = soup('form')[0]
+    inputs = form.find_all('input')
+    ## Only keep key-value inputs
+    kvinputs = filter(lambda ipt: 'value' in ipt.attrs, inputs)
+    data = {ipt['name']:ipt['value'].encode('utf-8') for ipt in kvinputs}
+
+##
