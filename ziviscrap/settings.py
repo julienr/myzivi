@@ -12,6 +12,11 @@ SPIDER_MODULES = ['ziviscrap.spiders']
 NEWSPIDER_MODULE = 'ziviscrap.spiders'
 
 LOG_LEVEL = 'INFO'
+DATA_DIR = '/home/julien/dev/zivi/_data/scraped/'
+DETAIL_HTML_DIR = DATA_DIR + 'detail_html/'
+
+FEED_FORMAT = 'json'
+FEED_URI = 'file://' + DATA_DIR + 'items.json'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ziviscrap (+http://www.yourdomain.com)'
