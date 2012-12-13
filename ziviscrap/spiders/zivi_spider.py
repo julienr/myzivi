@@ -85,6 +85,7 @@ class ZiviSpider(BaseSpider):
         total_pages = extract_total_pages(hxs)
         log.msg('Current page : %d / %d' % (current_page, total_pages))
         workspecs_a = hxs.select('//a[contains(@id, "%s")]' % WORKSPEC_A_ID)
+        log.msg('Number of workspecs : %d' % len(workspecs_a))
         for a in workspecs_a:
             item = WorkSpecItem()
             item['shortname'] = a.select('text()').extract()[0]
@@ -93,10 +94,14 @@ class ZiviSpider(BaseSpider):
             item['phid'] = a.select('@href').re(phid_re)[0]
             yield item
             full_url = urljoin_rfc(response.url, url)
+            self.crawler.stats.inc_value('workspec_pages_queued')
             yield Request(full_url, callback=self.parse_workspec_page,
+                          dont_filter=True,
                           meta={'phid':item['phid']})
 
-        if current_page < total_pages:
+        #if current_page < total_pages:
+        # TODO: Remove this, debug only
+        if current_page < 3:
             formdata = {CURRENT_PAGE_INPUT :str(current_page + 1)}
             yield FormRequest.from_response(response, dont_click=True,
                     formdata=formdata, callback=self.parse_workspecs_list)
@@ -107,5 +112,6 @@ class ZiviSpider(BaseSpider):
         path = os.path.join(settings.DETAIL_HTML_DIR, 'detail_%s.html' % phid)
         with open(path, 'w') as f:
             f.write(response.body)
+        self.crawler.stats.inc_value('workspec_pages_written')
         log.msg('Detail page saved to %s' % path)
 

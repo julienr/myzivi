@@ -18,5 +18,7 @@ DETAIL_HTML_DIR = DATA_DIR + 'detail_html/'
 FEED_FORMAT = 'json'
 FEED_URI = 'file://' + DATA_DIR + 'items.json'
 
+LOG_FILE = DATA_DIR + 'log.txt'
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ziviscrap (+http://www.yourdomain.com)'
