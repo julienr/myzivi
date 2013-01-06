@@ -1,0 +1,51 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <!--<style type="text/css">-->
+      <!--html { height: 80% }-->
+      <!--body { height: 100%; margin: 0; padding: 0 }-->
+      <!--#map_canvas { height: 100% }-->
+    <!--</style>-->
+    <link href="{%static 'bootstrap/css/bootstrap.min.css'%}"
+          rel="stylesheet" media="screen">
+    <link href="{%static 'css/main.css'%}"
+          rel="stylesheet" media="screen">
+
+    <!-- Javascript -->
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsyGBE5AMjlj5eYNQR6_FmgeM54rDPi58&sensor=false">
+    </script>
+    <script type="text/javascript"
+            src="{% static 'js/markerclusterer_compiled.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/oms.min.js' %}"></script>
+
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    {% block javascript %}{% endblock %}
+
+  </head>
+  <body>
+      <header id="overview" class="jumbotron">
+        <div class="container-fluid">
+            <h1>Zivisearch</h1>
+            <p class="lead">... bla !</p>
+        </div>
+      </header>
+      <div class="container-fluid">
+          <div class="row-fluid">
+              <div class="span9">
+                  {% block content %}{% endblock %}
+              </div>
+              <div class="span3">
+                  <ul class="nav nav-list">
+                      <li class="nav-header">Sidebar</li>
+                      <li class="active"><a href="#">Link</a></li>
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </body>
+</html>

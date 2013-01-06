@@ -1,55 +1,49 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <style type="text/css">
-      html { height: 80% }
-      body { height: 100%; margin: 0; padding: 0 }
-      #map_canvas { height: 100% }
-    </style>
-    <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsyGBE5AMjlj5eYNQR6_FmgeM54rDPi58&sensor=false">
-    </script>
-    <script type="text/javascript" src="{% static 'js/markerclusterer_compiled.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/oms.min.js' %}"></script>
+{% extends "base.html" %}
+{% block javascript %}
+<script type="text/javascript">
+function windowResized() {
+    var h = $(window).height();
+    var offsetTop = 0; // Calculate the top offset
+    $('#map_canvas').css('height', (h - offsetTop));
+}
 
-    <script type="text/javascript">
-      var items = {{ items|safe }};
-      function initialize() {
-        var mapOptions = {
-          center: new google.maps.LatLng(46.815099,8.22876),
-          zoom: 9,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),
-                mapOptions);
-        var infowindow = new google.maps.InfoWindow();
+var items = {{ items|safe }};
 
-        var oms = new OverlappingMarkerSpiderfier(map);
-        oms.addListener('click', function(marker) {
-            infowindow.setContent(marker.desc);
-            infowindow.open(map, marker);
+$(function() {
+    var mapOptions = {
+      center: new google.maps.LatLng(46.815099,8.22876),
+      zoom: 9,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+    var infowindow = new google.maps.InfoWindow();
+
+    var oms = new OverlappingMarkerSpiderfier(map);
+    oms.addListener('click', function(marker) {
+        infowindow.setContent(marker.desc);
+        infowindow.open(map, marker);
+    });
+
+    var markers = [];
+    for (var i = 0; i < items.length; i++) {
+        var mpos = items[i].address.geometry.location
+        marker = new google.maps.Marker({
+            position: new google.maps.LatLng(mpos.lat, mpos.lng),
+            map:map
         });
+        marker.desc = items[i].url;
+        markers.push(marker);
+        oms.addMarker(marker);
+    }
+    var mcOptions = { maxZoom: 12 };
+    var markerCluster = new MarkerClusterer(map, markers, mcOptions);
+    $(window).resize(windowResized).resize();
+});
 
-        var markers = [];
-        for (var i = 0; i < items.length; i++) {
-            var mpos = items[i].address.geometry.location
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(mpos.lat, mpos.lng),
-                map:map
-            });
-            marker.desc = items[i].url;
-            markers.push(marker);
-            oms.addMarker(marker);
-        }
-        var mcOptions = { maxZoom: 12 };
-        var markerCluster = new MarkerClusterer(map, markers, mcOptions);
+</script>
+{% endblock %}
 
-      }
-    </script>
-  </head>
-  <body onload="initialize()">
-    <div id="map_canvas" style="width:100%; height:100%"></div>
-  </body>
-</html>
+{% block content %}
+<div id="map_canvas" style="width:100%; height:100%"></div>
+{% endblock %}
