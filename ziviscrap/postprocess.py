@@ -3,9 +3,9 @@ import ziviscrap.settings as settings
 import json
 import os, urlparse
 from scrapy.selector import HtmlXPathSelector
-import common.model
 import urllib2
 import urllib
+import time
 ##
 GOOGLE_GEOCODING_API = "http://maps.googleapis.com/maps/api/geocode/json?"
 def geocode_address(address):
@@ -59,13 +59,15 @@ def geocode_pow_items(pow_items):
     outlist = []
     for place_of_work, item in pow_items:
         address = geocode_address(place_of_work)
-        if address is not None:
+        if address is not None and len(address['results']) > 0:
             newitem = item.copy()
-            newitem['address'] = address
+            newitem['address'] = address['results'][0]
             outlist.append(newitem)
         else:
             print 'No geocoded address for phid=%s, place_of_work=%s' % (
                     item['phid'], place_of_work)
+            # TODO: Handle status == OVER_QUERY_LIMIT by retrying
+        time.sleep(0.5)
     return outlist
 outitems = geocode_pow_items(pow_items)
 
