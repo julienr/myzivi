@@ -1,0 +1,3 @@
+Use emberjs. django-ember includes an ember - tastypie adapter which should
+make it easy to wire the ember models to django models
+https://github.com/noirbizarre/django-ember
