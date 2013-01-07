@@ -57,11 +57,14 @@ def geocode_pow_items(pow_items):
     with an added 'address' entry containing the geocoded address
     """
     outlist = []
-    for place_of_work, item in pow_items:
+    for i, (place_of_work, item) in enumerate(pow_items):
+        print i, ' / ', len(pow_items)
         address = geocode_address(place_of_work)
         if address is not None and len(address['results']) > 0:
             newitem = item.copy()
-            newitem['address'] = address['results'][0]
+            #newitem['address'] = address['results'][0]
+            newitem['addresses'] = address['results']
+            newitem['place_of_work'] = place_of_work
             outlist.append(newitem)
         else:
             print 'No geocoded address for phid=%s, place_of_work=%s' % (
