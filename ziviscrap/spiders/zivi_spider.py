@@ -75,11 +75,13 @@ class ZiviSpider(BaseSpider):
     start_urls = [WORKSPEC_LIST_URL]
 
     def parse(self, response):
+        log.msg('parse : [%s]' % response.url)
         formdata = {POST_PAGE_SIZE: '100'}
         return FormRequest.from_response(response, dont_click=True,
                 formdata=formdata, callback=self.parse_workspecs_list)
 
     def parse_workspecs_list(self, response):
+        log.msg('parse_workspecs_list : [%s]' % response.url)
         hxs = HtmlXPathSelector(response)
         current_page = extract_current_page(hxs)
         total_pages = extract_total_pages(hxs)
@@ -99,14 +101,15 @@ class ZiviSpider(BaseSpider):
                           dont_filter=True,
                           meta={'phid':item['phid']})
 
-        #if current_page < total_pages:
+        if current_page < total_pages:
         # TODO: Remove this, debug only
-        if current_page < 3:
+        #if current_page < 3:
             formdata = {CURRENT_PAGE_INPUT :str(current_page + 1)}
             yield FormRequest.from_response(response, dont_click=True,
                     formdata=formdata, callback=self.parse_workspecs_list)
 
     def parse_workspec_page(self, response):
+        log.msg('parse_workspec_page : [%s]' % response.url)
         phid = response.meta['phid']
         mkdir_p(settings.DETAIL_HTML_DIR)
         path = os.path.join(settings.DETAIL_HTML_DIR, 'detail_%s.html' % phid)

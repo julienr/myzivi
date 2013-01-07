@@ -20,5 +20,10 @@ FEED_URI = 'file://' + DATA_DIR + 'items.json'
 
 LOG_FILE = DATA_DIR + 'log.txt'
 
+DOWNLOAD_DELAY = 0.25
+
+RETRY_ENABLED = True
+RETRY_TIMES = 5
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ziviscrap (+http://www.yourdomain.com)'

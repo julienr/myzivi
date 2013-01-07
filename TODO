@@ -1,3 +1,6 @@
 Use emberjs. django-ember includes an ember - tastypie adapter which should
 make it easy to wire the ember models to django models
 https://github.com/noirbizarre/django-ember
+
+# Find locations withing a bounding box
+http://stackoverflow.com/questions/5437457/find-locations-within-a-lat-lng-bounding-box
