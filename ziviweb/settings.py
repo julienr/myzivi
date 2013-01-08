@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'zivimap',
     'tastypie',
+    'djangojs',
 )
 
 # A sample logging configuration. The only tangible logging

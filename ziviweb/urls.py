@@ -1,15 +1,17 @@
 from django.conf.urls import patterns, include, url
 from zivimap.api import WorkSpecResource
-
-workspec_resource = WorkSpecResource()
+from tastypie.api import Api
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
+v1_api = Api(api_name='v1')
+v1_api.register(WorkSpecResource())
+
 urlpatterns = patterns('',
     url(r'^map/', include('zivimap.urls')),
-    url(r'^api/', include(workspec_resource.urls)),
+    url(r'^api/', include(v1_api.urls)),
     # Examples:
     # url(r'^$', 'ziviweb.views.home', name='home'),
     # url(r'^ziviweb/', include('ziviweb.foo.urls')),

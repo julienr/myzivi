@@ -1,5 +1,11 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+
 {% block javascript %}
+<script type="text/javascript"
+        src="{% static 'js/map.js' %}"></script>
+
+{% comment %}
 <script type="text/javascript">
 function windowResized() {
     var h = $(window).height();
@@ -42,8 +48,26 @@ $(function() {
 });
 
 </script>
+{% endcomment %}
+<script type="text/template" id="workspec_template">
+    <a href="<%= url %>"><%= shortname %></a>
+</script>
+
+<script type="text/javascript">
+    var _workspecs = {{ workspecs|safe }};
+    var App = {};
+    $(initMap(_workspecs, App));
+</script>
 {% endblock %}
 
 {% block content %}
+{% comment %}
 <div id="map_canvas" style="width:100%; height:100%"></div>
+{% endcomment %}
+{% endblock %}
+
+{% block sidebar %}
+<div id="mapapp">
+    <ul id="workspec-list"></ul>
+</div>
 {% endblock %}

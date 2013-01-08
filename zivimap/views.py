@@ -1,10 +1,9 @@
 from django.shortcuts import render
-import json
-
-DATAFILE = '/home/julien/dev/zivi/_data/scraped/final_items.json'
-with open(DATAFILE) as f:
-    items = json.load(f)
+from django.core import serializers
+from zivimap.models import WorkSpec
 
 def index(request):
-    context = {'items' : json.dumps(items)}
+    ws = WorkSpec.objects.all()[:10]
+    sws = serializers.serialize('json', ws)
+    context = {'workspecs' : sws}
     return render(request, 'index.html', context)
