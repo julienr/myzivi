@@ -8,13 +8,14 @@ function windowResized() {
 // initialWorkspecs is a list of JSON workspecs
 // N is the namespace to use for this app
 function initMap(initialWorkspecs, N) {
-    N.WorkSpec = Backbone.Model.extend({});
-
-    N.WorkSpecList = Backbone.Collection.extend({
-        model: N.WorkSpec,
+    N.WorkSpec = Backbone.Model.extend({
+        urlRoot: WORKSPEC_API,
     });
 
-    N.workspecs = new N.WorkSpecList;
+    N.WorkSpecList = Backbone.Collection.extend({
+        urlRoot: WORKSPEC_API,
+        model: N.WorkSpec,
+    });
 
     N.WorkSpecView = Backbone.View.extend({
         tagName: "li",
@@ -50,44 +51,87 @@ function initMap(initialWorkspecs, N) {
     N.MapView = Backbone.View.extend({
       el: $("#map_canvas"),
       initialize: function() {
+        _.bindAll(this, 'onViewChanged', 'onAdd', 'onRemove');
+
         var mapOptions = {
           center: new google.maps.LatLng(46.815099,8.22876),
           zoom: 8,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        var map = new google.maps.Map(document.getElementById("map_canvas"),
+        this.map = new google.maps.Map(document.getElementById("map_canvas"),
                                       mapOptions);
+        var _col = this.collection;
         var infowindow = new google.maps.InfoWindow();
 
-        var oms = new OverlappingMarkerSpiderfier(map);
-        oms.addListener('click', function(marker) {
+        this.oms = new OverlappingMarkerSpiderfier(this.map);
+        this.oms.addListener('click', function(marker) {
             infowindow.setContent(marker.desc);
             infowindow.open(map, marker);
         });
 
         var mcOptions = { maxZoom: 12 };
-        var markerCluster = new MarkerClusterer(map, [], mcOptions);
+        this.markerCluster = new MarkerClusterer(this.map, [], mcOptions);
 
         $(window).resize(windowResized).resize();
 
-        // Bind event to collection
-        this.collection.bind('add', function(model) {
+        // -- Setup event listener
+
+        // Register for the idle event (fired after movement). This is the base
+        // for interactivity and it will trigger a sync() of the workspecs
+        // and map/list markers update
+        // http://code.google.com/p/gmaps-api-issues/issues/detail?id=1371
+        google.maps.event.addListener(this.map, 'idle', this.onViewChanged);
+
+        this.collection.bind('add', this.onAdd);
+        this.collection.bind('remove', this.onRemove);
+      },
+
+      // Called when a workspec is added to the collection
+      onAdd: function(model) {
           var mpos = model.get("latlng");
-          marker = new google.maps.Marker({
+          var marker = new google.maps.Marker({
             position: new google.maps.LatLng(mpos.lat, mpos.lng),
-            map:map
+            map: this.map
           });
           marker.desc = model.get("url");
-          markerCluster.addMarker(marker);
-          oms.addMarker(marker);
-        });
+          this.markerCluster.addMarker(marker);
+          this.oms.addMarker(marker);
+          model.marker = marker;
+      },
+
+      onRemove: function(model) {
+          this.markerCluster.removeMarker(model.marker);
+          this.oms.removeMarker(model.marker);
+          model.marker.setMap(null);
+          model.marker = null;
+      },
+
+      // Called when map view is changed by the user
+      onViewChanged: function() {
+          console.log('idle');
+          // Update collection by querying markers within new view bounds
+          var bounds = this.map.getBounds();
+          var swlat = bounds.getSouthWest().lat();
+          var swlng = bounds.getSouthWest().lng();
+          var nelat = bounds.getSouthWest().lat();
+          var nelng = bounds.getSouthWest().lng();
+          var params = {'latlngbb' : swlat.toString() + ","
+                                   + swlng.toString() + ","
+                                   + nelat.toString() + ","
+                                   + nelng.toString()};
+          this.collection.fetch({data: $.param(params)});
+
       },
     });
 
-    N.list = new N.ListView({
+
+    N.workspecs = new N.WorkSpecList;
+
+    N.listview = new N.ListView({
       collection: N.workspecs
     });
-    N.map = new N.MapView({
+
+    N.mapview = new N.MapView({
       collection: N.workspecs
     });
 

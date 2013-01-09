@@ -129,6 +129,8 @@ INSTALLED_APPS = (
     'zivimap',
     'tastypie',
     'djangojs',
+    # https://github.com/PaulUithol/backbone-tastypie
+    'backbone_tastypie',
 )
 
 # A sample logging configuration. The only tangible logging
