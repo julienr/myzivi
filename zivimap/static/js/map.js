@@ -1,8 +1,11 @@
 // Resize map canvas when resizing window
 function windowResized() {
     var h = $(window).height();
-    var offsetTop = 0; // Calculate the top offset
-    $('#map_canvas').css('height', (h - offsetTop));
+    var offsetTop = $('#top_navbar').height(); // Calculate the top offset
+    var mapheight = (h - offsetTop);
+    $('#map_canvas').css('height', mapheight);
+    // TODO: Need additional offset because of scrollbar. Not very clean
+    $('#maplist').css('height', mapheight - 40);
 }
 
 // initialWorkspecs is a list of JSON workspecs
@@ -17,6 +20,9 @@ function initMap(initialWorkspecs, N) {
         model: N.WorkSpec,
     });
 
+    // Backbone.Pageable doesn't work well with Backbone-tastypie
+    // TODO: Write a client-side pagination lib
+ 
     N.WorkSpecView = Backbone.View.extend({
         tagName: "li",
         template: _.template($('#workspec_template').html()),
@@ -32,9 +38,9 @@ function initMap(initialWorkspecs, N) {
     N.ListView = Backbone.View.extend({
         el: $("#maplist"),
         initialize: function() {
-            this.collection.bind('add', this.addOne, this);
-            this.collection.bind('reset', this.addAll, this);
-            this.collection.bind('all', this.render, this);
+            this.collection.on('add', this.addOne, this);
+            this.collection.on('reset', this.addAll, this);
+            this.collection.on('all', this.render, this);
             //workspecs.fecth();
         },
 
@@ -79,9 +85,9 @@ function initMap(initialWorkspecs, N) {
             // http://code.google.com/p/gmaps-api-issues/issues/detail?id=1371
             google.maps.event.addListener(this.map, 'idle', this.onViewChanged);
 
-            this.collection.bind('add', this.onAdd);
-            this.collection.bind('remove', this.onRemove);
-            this.collection.bind('reset', this.onReset);
+            this.collection.on('add', this.onAdd, this);
+            this.collection.on('remove', this.onRemove, this);
+            this.collection.on('reset', this.onReset, this);
         },
 
         onReset: function() {
@@ -128,12 +134,13 @@ function initMap(initialWorkspecs, N) {
             var params = {'latlngbb' : swlat.toString() + ","
                 + swlng.toString() + "," + nelat.toString() + ","
                 + nelng.toString()};
+            console.log('onViewChanged => fetch')
             this.collection.fetch({data: $.param(params), update:true});
         },
     });
 
 
-    N.workspecs = new N.WorkSpecList;
+    N.workspecs = new N.WorkSpecList([], {mode: 'client'});
 
     N.listview = new N.ListView({
       collection: N.workspecs

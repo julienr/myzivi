@@ -4,31 +4,46 @@
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <!--<style type="text/css">-->
-      <!--html { height: 80% }-->
-      <!--body { height: 100%; margin: 0; padding: 0 }-->
-      <!--#map_canvas { height: 100% }-->
-    <!--</style>-->
     <link href="{%static 'bootstrap/css/bootstrap.min.css'%}"
           rel="stylesheet" media="screen">
     <link href="{%static 'css/main.css'%}"
-          rel="stylesheet" media="screen">
+    rel="stylesheet" media="screen">
   </head>
   <body>
-      <header id="overview" class="jumbotron">
+    <div id="top_navbar" class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
         <div class="container-fluid">
-            <h1>Zivisearch</h1>
-            <p class="lead">... bla !</p>
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Zivigo</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
         </div>
-      </header>
+      </div>
+    </div>
+    <div class="hero-unit">
+      <!--<p>Zivigo is an easy way to search for swiss civil service jobs</p>-->
+    </div>
       <div class="container-fluid">
           <div class="row-fluid">
+             <!--<div class="span3">-->
+                  <!--<ul class="nav nav-list">-->
+                    <!--<li class="nav-header">Filters</li>-->
+                  <!--</ul>-->
+              <!--</div>-->
               <div class="span9">
                   {% block content %}{% endblock %}
               </div>
               <div class="span3">
                   <ul class="nav nav-list">
-                      <li class="nav-header">Sidebar</li>
+                      <li class="nav-header">Jobs</li>
                       {% block sidebar %}{% endblock %}
                   </ul>
               </div>
