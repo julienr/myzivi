@@ -128,7 +128,7 @@ function initMap(initialWorkspecs, N) {
             var params = {'latlngbb' : swlat.toString() + ","
                 + swlng.toString() + "," + nelat.toString() + ","
                 + nelng.toString()};
-            this.collection.fetch({data: $.param(params)});
+            this.collection.fetch({data: $.param(params), update:true});
         },
     });
 

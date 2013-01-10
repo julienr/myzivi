@@ -18,6 +18,7 @@ class WorkSpecResource(ModelResource):
         allowed_methods = ['get']
         # Without that, resource_uri is empty in the view
         api_name = settings.API_VERSION
+        limit = 0
 
     def build_filters(self, filters=None):
         if filters is None:
