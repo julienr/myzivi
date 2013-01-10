@@ -1,4 +1,5 @@
 ##
+import re
 from django.core.management import setup_environ
 from ziviweb import settings
 setup_environ(settings)
@@ -49,7 +50,8 @@ def process_item(item):
     locality = addr['locality']
     latlng = addr['latlng']
     address = addr['address']
-    phid = item['phid']
+    # Remove dots from phid. This cause some bugs with django/tastypie urls
+    phid = re.sub('[\W_]', '', item['phid'])
     shortname = item['shortname']
     url = urlparse.urljoin(ZIVI_DOMAIN, item['url'])
 
@@ -57,10 +59,9 @@ def process_item(item):
     addr, created = Address.objects.get_or_create(canton=canton,
             locality=locality, defaults={'latitude':latlng['lat'],
                 'longitude':latlng['lng']})
-    ws, created = WorkSpec.objects.get_or_create(phid=phid)
+    ws, created = WorkSpec.objects.get_or_create(phid=phid, address=addr)
     ws.shortname = shortname
     ws.url = url
-    ws.address = addr
     ws.save()
 ##
 items = map(process_item, items)

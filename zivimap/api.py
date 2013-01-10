@@ -1,10 +1,23 @@
-from zivimap.models import WorkSpec
+import ziviweb.settings as settings
+from django.core.urlresolvers import reverse
+from zivimap.models import WorkSpec, Address
 from tastypie.resources import ModelResource
+from tastypie import fields, utils
+
+class AddressResource(ModelResource):
+    class Meta:
+        queryset = Address.objects.all()
+        resource_name = 'address'
+        include_resource_uri = False
 
 class WorkSpecResource(ModelResource):
+    address = fields.ToOneField(AddressResource, 'address', full=True)
     class Meta:
         queryset = WorkSpec.objects.all()
         resource_name = 'workspec'
+        allowed_methods = ['get']
+        # Without that, resource_uri is empty in the view
+        api_name = settings.API_VERSION
 
     def build_filters(self, filters=None):
         if filters is None:

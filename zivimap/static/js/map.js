@@ -49,79 +49,87 @@ function initMap(initialWorkspecs, N) {
     });
 
     N.MapView = Backbone.View.extend({
-      el: $("#map_canvas"),
-      initialize: function() {
-        _.bindAll(this, 'onViewChanged', 'onAdd', 'onRemove');
+        el: $("#map_canvas"),
+        infowindow_template : _.template($('#infowindow_template').html()),
+        initialize: function() {
+            _.bindAll(this, 'onViewChanged', 'onAdd', 'onRemove', 'onReset',
+                      'onMarkerClick');
 
-        var mapOptions = {
-          center: new google.maps.LatLng(46.815099,8.22876),
-          zoom: 8,
-          mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        this.map = new google.maps.Map(document.getElementById("map_canvas"),
-                                      mapOptions);
-        var _col = this.collection;
-        var infowindow = new google.maps.InfoWindow();
+            var mapOptions = {
+                center: new google.maps.LatLng(46.815099,8.22876),
+                zoom: 8,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            this.map = new google.maps.Map(this.el, mapOptions);
+            this.infowindow = new google.maps.InfoWindow();
 
-        this.oms = new OverlappingMarkerSpiderfier(this.map);
-        this.oms.addListener('click', function(marker) {
-            infowindow.setContent(marker.desc);
-            infowindow.open(map, marker);
-        });
+            this.oms = new OverlappingMarkerSpiderfier(this.map);
+            this.oms.addListener('click', this.onMarkerClick);
 
-        var mcOptions = { maxZoom: 12 };
-        this.markerCluster = new MarkerClusterer(this.map, [], mcOptions);
+            var mcOptions = { maxZoom: 12 };
+            this.markerCluster = new MarkerClusterer(this.map, [], mcOptions);
 
-        $(window).resize(windowResized).resize();
+            $(window).resize(windowResized).resize();
 
-        // -- Setup event listener
+            // -- Setup event listener
 
-        // Register for the idle event (fired after movement). This is the base
-        // for interactivity and it will trigger a sync() of the workspecs
-        // and map/list markers update
-        // http://code.google.com/p/gmaps-api-issues/issues/detail?id=1371
-        google.maps.event.addListener(this.map, 'idle', this.onViewChanged);
+            // Register for the idle event (fired after movement).
+            // This is the basis for interactivity and it will trigger a sync()
+            // of the workspecs and map/list markers update
+            // http://code.google.com/p/gmaps-api-issues/issues/detail?id=1371
+            google.maps.event.addListener(this.map, 'idle', this.onViewChanged);
 
-        this.collection.bind('add', this.onAdd);
-        this.collection.bind('remove', this.onRemove);
-      },
+            this.collection.bind('add', this.onAdd);
+            this.collection.bind('remove', this.onRemove);
+            this.collection.bind('reset', this.onReset);
+        },
 
-      // Called when a workspec is added to the collection
-      onAdd: function(model) {
-          var mpos = model.get("latlng");
-          var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(mpos.lat, mpos.lng),
-            map: this.map
-          });
-          marker.desc = model.get("url");
-          this.markerCluster.addMarker(marker);
-          this.oms.addMarker(marker);
-          model.marker = marker;
-      },
+        onReset: function() {
+            this.collection.each(this.onAdd);
+        },
 
-      onRemove: function(model) {
-          this.markerCluster.removeMarker(model.marker);
-          this.oms.removeMarker(model.marker);
-          model.marker.setMap(null);
-          model.marker = null;
-      },
+        // Called when a workspec is added to the collection
+        onAdd: function(model) {
+            var address = model.get("address");
+            var lat = address.latitude;
+            var lng = address.longitude;
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(lat, lng),
+                map: this.map
+            });
+            marker.model = model;
+            this.markerCluster.addMarker(marker);
+            this.oms.addMarker(marker);
+            model.marker = marker;
+        },
 
-      // Called when map view is changed by the user
-      onViewChanged: function() {
-          console.log('idle');
-          // Update collection by querying markers within new view bounds
-          var bounds = this.map.getBounds();
-          var swlat = bounds.getSouthWest().lat();
-          var swlng = bounds.getSouthWest().lng();
-          var nelat = bounds.getSouthWest().lat();
-          var nelng = bounds.getSouthWest().lng();
-          var params = {'latlngbb' : swlat.toString() + ","
-                                   + swlng.toString() + ","
-                                   + nelat.toString() + ","
-                                   + nelng.toString()};
-          this.collection.fetch({data: $.param(params)});
+        onRemove: function(model) {
+            this.markerCluster.removeMarker(model.marker);
+            this.oms.removeMarker(model.marker);
+            model.marker.setMap(null);
+            model.marker = null;
+        },
 
-      },
+        onMarkerClick: function(marker) {
+            //this.infowindow.setContent(marker.desc);
+            var html = this.infowindow_template(marker.model.toJSON());
+            this.infowindow.setContent(html);
+            this.infowindow.open(this.map, marker);
+        },
+
+        // Called when map view is changed by the user
+        onViewChanged: function() {
+            // Update collection by querying markers within new view bounds
+            var bounds = this.map.getBounds();
+            var swlat = bounds.getSouthWest().lat();
+            var swlng = bounds.getSouthWest().lng();
+            var nelat = bounds.getNorthEast().lat();
+            var nelng = bounds.getNorthEast().lng();
+            var params = {'latlngbb' : swlat.toString() + ","
+                + swlng.toString() + "," + nelat.toString() + ","
+                + nelng.toString()};
+            this.collection.fetch({data: $.param(params)});
+        },
     });
 
 
@@ -136,14 +144,14 @@ function initMap(initialWorkspecs, N) {
     });
 
     // Populate with initial data
-    _.each(initialWorkspecs, function(jsonws){
-        var ws = new N.WorkSpec({
-            shortname: jsonws.fields.shortname,
-            url: jsonws.fields.url,
-            latlng: {'lat' : jsonws.fields.address.fields.latitude,
-                     'lng' : jsonws.fields.address.fields.longitude}
-        });
-        N.workspecs.add(ws);
-    });
+    //_.each(initialWorkspecs, function(jsonws){
+        //var ws = new N.WorkSpec({
+            //shortname: jsonws.fields.shortname,
+            //url: jsonws.fields.url,
+            //latlng: {'lat' : jsonws.fields.address.fields.latitude,
+                     //'lng' : jsonws.fields.address.fields.longitude}
+        //});
+        //N.workspecs.add(ws);
+    //});
 
 }
