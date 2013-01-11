@@ -15,31 +15,6 @@ with open(INPUT_FILE) as f:
     items = json.load(f)
 
 ##
-def find_locality_address(addresses):
-    """
-    From a JSON response of Google geocoding (potentially
-    containing multiple addresses), find the most likely address.
-    We basically want the address where place_of_work is a locality or
-    a sublocality
-    """
-    for addr in addresses:
-        locality = None
-        canton = None
-        for component in addr['address_components']:
-            ctypes = component['types']
-            if 'locality' in ctypes:
-                locality = component['long_name']
-            elif 'sublocality' in ctypes:
-                locality = component['long_name']
-            elif 'administrative_area_level_1' in ctypes:
-                canton = component['long_name']
-        if canton is not None and locality is not None:
-            return {'canton': canton,
-                    'locality': locality,
-                    'latlng' : addr['geometry']['location'],
-                    'address' : addr['formatted_address']}
-    return None
-
 def process_item(item):
     # Extract infos
     addr = find_locality_address(item['addresses'])

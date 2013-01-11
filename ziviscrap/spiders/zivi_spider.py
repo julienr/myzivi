@@ -32,6 +32,24 @@ BUTTON_FORWARD = 'tl00$cphContent$ctl04$workSpecificationList$TableUpdate'\
 
 POST_PAGE_SIZE = 'ctl00$cphContent$ctl04$workSpecificationList$'\
                + 'workSpecificationPagingBar$pageSizeValue'
+
+POST_DEFAULT_DATA = {
+    # TODO: Dates should change over time...
+    'cphContent_ctl04_ctl01_MonthEnd':'Dezember 2016',
+    'cphContent_ctl04_ctl01_MonthEnd_SelIndex':'47',
+    'cphContent_ctl04_ctl01_MonthEnd_Value':'12.2016',
+    'cphContent_ctl04_ctl01_MonthStart':'Januar 2013',
+    'cphContent_ctl04_ctl01_MonthStart_SelIndex':'0',
+    'cphContent_ctl04_ctl01_MonthStart_Value':'1.2013',
+
+    # Values for minimum duration slider
+    'cphContent_ctl04_ctl01_Slider':'4',
+    'cphContent_ctl04_ctl01_Slider1_Value':'4',
+
+    # Post page size
+    POST_PAGE_SIZE: '100',
+}
+
 # Html IDs
 WORKSPEC_A_ID = "workSpecificationList_workSpecificationTitle"
 CURRENT_PAGE_INPUT = 'ctl00$cphContent$ctl04$workSpecificationList$'\
@@ -76,9 +94,8 @@ class ZiviSpider(BaseSpider):
 
     def parse(self, response):
         log.msg('parse : [%s]' % response.url)
-        formdata = {POST_PAGE_SIZE: '100'}
         return FormRequest.from_response(response, dont_click=True,
-                formdata=formdata, callback=self.parse_workspecs_list)
+                formdata=POST_DEFAULT_DATA, callback=self.parse_workspecs_list)
 
     def parse_workspecs_list(self, response):
         log.msg('parse_workspecs_list : [%s]' % response.url)
@@ -102,9 +119,9 @@ class ZiviSpider(BaseSpider):
                           meta={'phid':item['phid']})
 
         if current_page < total_pages:
-        # TODO: Remove this, debug only
-        #if current_page < 3:
-            formdata = {CURRENT_PAGE_INPUT :str(current_page + 1)}
+            formdata = dict(POST_DEFAULT_DATA)
+            formdata[CURRENT_PAGE_INPUT] = str(current_page + 1)
+            log.msg('Queueing next page : %d' % (current_page + 1))
             yield FormRequest.from_response(response, dont_click=True,
                     formdata=formdata, callback=self.parse_workspecs_list)
 
@@ -116,5 +133,5 @@ class ZiviSpider(BaseSpider):
         with open(path, 'w') as f:
             f.write(response.body)
         self.crawler.stats.inc_value('workspec_pages_written')
-        log.msg('Detail page saved to %s' % path)
+        #log.msg('Detail page saved to %s' % path)
 

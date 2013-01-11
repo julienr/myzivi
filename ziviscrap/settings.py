@@ -19,11 +19,19 @@ FEED_FORMAT = 'json'
 FEED_URI = 'file://' + DATA_DIR + 'items.json'
 
 LOG_FILE = DATA_DIR + 'log.txt'
+LOG_LEVEL = 'DEBUG'
 
-DOWNLOAD_DELAY = 0.25
+DOWNLOAD_DELAY = 0.1
 
 RETRY_ENABLED = True
 RETRY_TIMES = 5
 
+# Disable redirect because the website redirects us on 500 error
+REDIRECT_ENABLED = False
+# Retry 500 and 404 because sometimes, temporary errors seem to cause the
+# server to return 404, but the page exists on next try
+RETRY_HTTP_CODES = [500, 503, 504, 400, 404, 408, 300, 307]
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ziviscrap (+http://www.yourdomain.com)'
+USER_AGENT = "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.16) Gecko/20120421 Firefox/11.0"
