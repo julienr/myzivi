@@ -1,3 +1,4 @@
 -e git+https://github.com/PaulUithol/backbone-tastypie.git#egg=backbone_tastypie
 django.js
 django-tastypie
+wadofstuff-django-serializers
