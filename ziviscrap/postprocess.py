@@ -168,7 +168,7 @@ def geocode_pow_items(pow_items):
     return outlist, errlist
 
 # TODO: DEBUG ONLY REMOVE !
-pow_items = pow_items[:100]
+#pow_items = pow_items[:100]
 outitems, erritems = geocode_pow_items(pow_items)
 print 'pow_items : ', len(pow_items)
 print 'outitems : ', len(outitems)

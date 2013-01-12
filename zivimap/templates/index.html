@@ -16,7 +16,7 @@
 <script type="text/javascript">
     // TODO: Do clean bootstraping http://backbonejs.org/#FAQ-bootstrap
     WORKSPEC_API = "{% url api_dispatch_list api_name="v1" resource_name="workspec" %}";
-    var _workspecs = {{ workspecs|safe }};
+    var _workspecs = JSON.parse("{{ workspecs|escapejs }}");
     var App = {};
     $(initMap(_workspecs, App));
 </script>

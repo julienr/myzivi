@@ -22,7 +22,7 @@ function initMap(initialWorkspecs, N) {
 
     // Backbone.Pageable doesn't work well with Backbone-tastypie
     // TODO: Write a client-side pagination lib
- 
+
     N.WorkSpecView = Backbone.View.extend({
         tagName: "li",
         template: _.template($('#workspec_template').html()),
@@ -134,8 +134,9 @@ function initMap(initialWorkspecs, N) {
             var params = {'latlngbb' : swlat.toString() + ","
                 + swlng.toString() + "," + nelat.toString() + ","
                 + nelng.toString()};
-            console.log('onViewChanged => fetch')
-            this.collection.fetch({data: $.param(params), update:true});
+            // TODO: Re-enable, but need server-side clustering
+            //console.log('onViewChanged => fetch')
+            //this.collection.fetch({data: $.param(params), update:true});
         },
     });
 
@@ -149,6 +150,9 @@ function initMap(initialWorkspecs, N) {
     N.mapview = new N.MapView({
       collection: N.workspecs
     });
+
+    // Boostrap initial data
+    N.workspecs.reset(initialWorkspecs);
 
     // Populate with initial data
     //_.each(initialWorkspecs, function(jsonws){

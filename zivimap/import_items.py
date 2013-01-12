@@ -17,14 +17,12 @@ with open(INPUT_FILE) as f:
 ##
 def process_item(item):
     # Extract infos
-    addr = find_locality_address(item['addresses'])
-    if addr is None:
-        print 'Skipping item with empty canton/locality : ', item
-        return
+    addr = item['address']
     canton = addr['canton']
     locality = addr['locality']
-    latlng = addr['latlng']
-    address = addr['address']
+    lat = addr['latitude']
+    lng = addr['longitude']
+    address = addr['formatted_address']
     # Remove dots from phid. This cause some bugs with django/tastypie urls
     phid = re.sub('[\W_]', '', item['phid'])
     shortname = item['shortname']
@@ -32,8 +30,7 @@ def process_item(item):
 
     # Create or update into DB
     addr, created = Address.objects.get_or_create(canton=canton,
-            locality=locality, defaults={'latitude':latlng['lat'],
-                'longitude':latlng['lng']})
+            locality=locality, defaults={'latitude':lat, 'longitude':lng})
     ws, created = WorkSpec.objects.get_or_create(phid=phid, address=addr)
     ws.shortname = shortname
     ws.url = url
