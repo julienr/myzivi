@@ -6,11 +6,11 @@
         src="{% static 'js/map.js' %}"></script>
 
 <script type="text/template" id="workspec_template">
-    <%= shortname %>
+    <a href="<% print(url_from_phid(raw_phid)); %>"><%= shortname %></a>
 </script>
 
 <script type="text/template" id="infowindow_template">
-    <a href="<%= url %>"><%= shortname %></a>
+    <a href="<% print(url_from_phid(raw_phid)); %>"><%= shortname %></a>
 </script>
 
 <script type="text/javascript">

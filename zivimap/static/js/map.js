@@ -8,6 +8,12 @@ function windowResized() {
     $('#maplist').css('height', mapheight - 40);
 }
 
+
+var ZIVI_WS_BASE = 'http://www.eis.zivi.admin.ch/ZiviEis/WorkSpecificationDetail.aspx?prevFunctionId=123F61E5-F417-4F51-AC59-906D6F999D02';
+function url_from_phid(phid) {
+    return ZIVI_WS_BASE + '&phid=' + phid;
+}
+
 // initialWorkspecs is a list of JSON workspecs
 // N is the namespace to use for this app
 function initMap(initialWorkspecs, initialAddresses, N) {
@@ -76,7 +82,7 @@ function initMap(initialWorkspecs, initialAddresses, N) {
             }
 
             _.bindAll(this, 'onViewChanged', 'onAdd', 'onRemove', 'onReset',
-                      'onMarkerClick');
+                      'onMarkerClick', 'zoomToCluster', 'displayClusterInfo');
 
             var mapOptions = {
                 center: new google.maps.LatLng(46.815099,8.22876),
@@ -86,15 +92,33 @@ function initMap(initialWorkspecs, initialAddresses, N) {
             this.map = new google.maps.Map(this.el, mapOptions);
             this.infowindow = new google.maps.InfoWindow();
 
-            this.oms = new OverlappingMarkerSpiderfier(this.map);
-            this.oms.addListener('click', this.onMarkerClick);
-
-            var mcOptions = { maxZoom: 12 };
+            // We handle click events and maxZoom ourselves
+            // - maxZoom is used to specify the maximum level at which to
+            //   create clusters
+            // - maxViewZoom is the max level at which we'll zoom when a
+            //   user clicks on a cluster
+            // We set maxZoom to null because we always want clusters. But
+            // we set a reasonable maximum zoom level of 12 considering that
+            // we mostly have city-level localization, going to road-level
+            // is pretty meaningless
+            var mcOptions = { maxZoom: null, zoomOnClick: false, minimumClusterSize: 1 };
             this.markerCluster = new MarkerClusterer(this.map, [], mcOptions);
+            this.markerCluster.maxViewZoom = 12;
 
             $(window).resize(windowResized).resize();
 
             // -- Setup event listener
+            var mapview = this;
+            google.maps.event.addListener(this.markerCluster, 'click', function(cluster) {
+                if (mapview.map.getZoom() >= mapview.markerCluster.maxViewZoom) {
+                    // If we're already at max zoom, show a popup with the
+                    // list of workspecs in the cluster
+                    console.log('Max zoom');
+                    mapview.displayClusterInfo(cluster);
+                } else {
+                    mapview.zoomToCluster(cluster);
+                }
+            });
 
             // Register for the idle event (fired after movement).
             // This is the basis for interactivity and it will trigger a sync()
@@ -105,6 +129,41 @@ function initMap(initialWorkspecs, initialAddresses, N) {
             this.collection.on('add', this.onAdd, this);
             this.collection.on('remove', this.onRemove, this);
             this.collection.on('reset', this.onReset, this);
+        },
+
+        // Called to display the workspecs contained in the cluster in the
+        // infowindow
+        displayClusterInfo: function(cluster) {
+            var markers = cluster.getMarkers();
+            var lst = _.map(markers, function(m) {
+                return '<li>' + this.infowindow_template(m.model.toJSON()) + '</li>';
+            }, this);
+            var html = _.reduceRight(lst, function(a, b) {
+                return a.concat(b);
+            }, "");
+            this.infowindow.setContent('<ul>' + html + '</ul>');
+            this.infowindow.open(this.map);
+            this.infowindow.setPosition(cluster.getCenter());
+        },
+
+        zoomToCluster: function(cluster) {
+            // Modified copy of default zoom function from markerClustererPlus
+            // Zoom into the cluster.
+            //mz = this.markerCluster.getMaxZoom();
+            mz = this.markerCluster.maxViewZoom;
+            theBounds = cluster.getBounds();
+            this.map.fitBounds(theBounds);
+            // There is a fix for Issue 170 here:
+            var map = this.map;
+            setTimeout(function () {
+                map.fitBounds(theBounds);
+                // Don't zoom beyond the max zoom level
+                // Because fitBounds will zoom, this check we didn't zoom too
+                // far
+                if (mz !== null && (map.getZoom() > mz)) {
+                    map.setZoom(mz + 1);
+                }
+            }, 100);
         },
 
         onReset: function() {
@@ -123,13 +182,11 @@ function initMap(initialWorkspecs, initialAddresses, N) {
             });
             marker.model = model;
             this.markerCluster.addMarker(marker);
-            this.oms.addMarker(marker);
             model.marker = marker;
         },
 
         onRemove: function(model) {
             this.markerCluster.removeMarker(model.marker);
-            this.oms.removeMarker(model.marker);
             model.marker.setMap(null);
             model.marker = null;
         },

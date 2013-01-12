@@ -24,6 +24,7 @@ def process_item(item):
     lng = addr['longitude']
     address = addr['formatted_address']
     # Remove dots from phid. This cause some bugs with django/tastypie urls
+    raw_phid = item['phid']
     phid = re.sub('[\W_]', '', item['phid'])
     shortname = item['shortname']
     url = urlparse.urljoin(ZIVI_DOMAIN, item['url'])
@@ -32,6 +33,7 @@ def process_item(item):
     addr, created = Address.objects.get_or_create(canton=canton,
             locality=locality, defaults={'latitude':lat, 'longitude':lng})
     ws, created = WorkSpec.objects.get_or_create(phid=phid, address=addr)
+    ws.raw_phid = raw_phid
     ws.shortname = shortname
     ws.url = url
     ws.save()

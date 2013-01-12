@@ -21,27 +21,11 @@ class MapSearchResource(ModelResource):
         queryset = WorkSpec.objects.all()
         resource_name = 'search'
         allowed_methods = ['get']
-        include_resource_uri = True
+        include_resource_uri = False
         # Without that, resource_uri is empty in the view
         api_name = settings.API_VERSION
         limit = 0
-        fields = ['address_id', 'shortname']
-
-    def get_resource_uri(self, bundle_or_obj=None):
-        # Same as ModelResource.get_resource_uri, but force resource name
-        # to be workspec instead of search
-        kwargs = {
-            'resource_name': 'workspec'
-        }
-        if isinstance(bundle_or_obj, Bundle):
-            kwargs['pk'] = bundle_or_obj.obj.pk
-        else:
-            kwargs['pk'] = bundle_or_obj.id
-
-        if self._meta.api_name is not None:
-            kwargs['api_name'] = self._meta.api_name
-
-        return self._build_reverse_url('api_dispatch_detail', kwargs=kwargs)
+        fields = ['address_id', 'shortname', 'raw_phid']
 
     def dehydrate(self, bundle):
         bundle.data['addrid'] = bundle.obj.address_id
