@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from zivimap.api import WorkSpecResource
+from zivimap.api import *
 from tastypie.api import Api
 import ziviweb.settings as settings
 
@@ -8,7 +8,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 v1_api = Api(api_name=settings.API_VERSION)
+v1_api.register(AddressResource())
 v1_api.register(WorkSpecResource())
+v1_api.register(MapSearchResource())
 
 print v1_api.urls
 

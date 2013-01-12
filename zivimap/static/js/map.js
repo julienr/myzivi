@@ -10,14 +10,25 @@ function windowResized() {
 
 // initialWorkspecs is a list of JSON workspecs
 // N is the namespace to use for this app
-function initMap(initialWorkspecs, N) {
+function initMap(initialWorkspecs, initialAddresses, N) {
     N.WorkSpec = Backbone.Model.extend({
-        urlRoot: WORKSPEC_API,
+        urlRoot: SEARCH_API,
+    });
+
+    N.Address = Backbone.Model.extend({
+        urlRoot: ADDRESS_API,
+        // We don't use resource_uri for addresses
+        idAttribute: 'id',
     });
 
     N.WorkSpecList = Backbone.Collection.extend({
-        urlRoot: WORKSPEC_API,
+        urlRoot: SEARCH_API,
         model: N.WorkSpec,
+    });
+
+    N.AddressList = Backbone.Collection.extend({
+        urlRoot: ADDRESS_API,
+        model: N.Address
     });
 
     // Backbone.Pageable doesn't work well with Backbone-tastypie
@@ -57,7 +68,13 @@ function initMap(initialWorkspecs, N) {
     N.MapView = Backbone.View.extend({
         el: $("#map_canvas"),
         infowindow_template : _.template($('#infowindow_template').html()),
-        initialize: function() {
+        addresses: null,
+
+        initialize: function(options) {
+            if (options.addresses) {
+                this.addresses = options.addresses;
+            }
+
             _.bindAll(this, 'onViewChanged', 'onAdd', 'onRemove', 'onReset',
                       'onMarkerClick');
 
@@ -95,10 +112,11 @@ function initMap(initialWorkspecs, N) {
         },
 
         // Called when a workspec is added to the collection
-        onAdd: function(model) {
-            var address = model.get("address");
-            var lat = address.latitude;
-            var lng = address.longitude;
+        onAdd: function(model, options) {
+            var addrid = model.get("addrid");
+            var address = this.addresses.get(addrid);
+            var lat = address.get("latitude");
+            var lng = address.get("longitude");
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, lng),
                 map: this.map
@@ -134,35 +152,22 @@ function initMap(initialWorkspecs, N) {
             var params = {'latlngbb' : swlat.toString() + ","
                 + swlng.toString() + "," + nelat.toString() + ","
                 + nelng.toString()};
-            // TODO: Re-enable, but need server-side clustering
             //console.log('onViewChanged => fetch')
             //this.collection.fetch({data: $.param(params), update:true});
         },
     });
 
-
-    N.workspecs = new N.WorkSpecList([], {mode: 'client'});
+    N.addresses = new N.AddressList(initialAddresses);
+    N.workspecs = new N.WorkSpecList();
 
     N.listview = new N.ListView({
-      collection: N.workspecs
+        collection: N.workspecs
     });
 
     N.mapview = new N.MapView({
-      collection: N.workspecs
+        collection: N.workspecs,
+        addresses: N.addresses,
     });
 
-    // Boostrap initial data
     N.workspecs.reset(initialWorkspecs);
-
-    // Populate with initial data
-    //_.each(initialWorkspecs, function(jsonws){
-        //var ws = new N.WorkSpec({
-            //shortname: jsonws.fields.shortname,
-            //url: jsonws.fields.url,
-            //latlng: {'lat' : jsonws.fields.address.fields.latitude,
-                     //'lng' : jsonws.fields.address.fields.longitude}
-        //});
-        //N.workspecs.add(ws);
-    //});
-
 }

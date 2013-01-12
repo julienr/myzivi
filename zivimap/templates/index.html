@@ -6,7 +6,7 @@
         src="{% static 'js/map.js' %}"></script>
 
 <script type="text/template" id="workspec_template">
-    <a href="<%= url %>"><%= shortname %></a>
+    <%= shortname %>
 </script>
 
 <script type="text/template" id="infowindow_template">
@@ -16,9 +16,13 @@
 <script type="text/javascript">
     // TODO: Do clean bootstraping http://backbonejs.org/#FAQ-bootstrap
     WORKSPEC_API = "{% url api_dispatch_list api_name="v1" resource_name="workspec" %}";
+    ADDRESS_API = "{% url api_dispatch_list api_name="v1" resource_name="address" %}";
+    SEARCH_API = "{% url api_dispatch_list api_name="v1" resource_name="search" %}";
+
     var _workspecs = JSON.parse("{{ workspecs|escapejs }}");
+    var _addresses = JSON.parse("{{ addresses|escapejs }}");
     var App = {};
-    $(initMap(_workspecs, App));
+    $(initMap(_workspecs, _addresses, App));
 </script>
 {% endblock %}
 

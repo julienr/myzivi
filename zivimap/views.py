@@ -1,19 +1,20 @@
 from django.shortcuts import render
 from django.core import serializers
-from zivimap.api import WorkSpecResource
-from zivimap.models import WorkSpec
+from zivimap.api import *
+from zivimap.models import WorkSpec, Address
 import json
 
-def index(request):
-    # Return all workspecs
-    # TODO: This is pretty massive... Better use server-side clustering
-    ws = WorkSpecResource()
-    allws = WorkSpec.objects.all()
+def all_resources(request, resource, queryset):
     objects = []
-    for m in allws:
-        bundle = ws.build_bundle(obj=m, request=request)
-        bundle = ws.full_dehydrate(bundle)
+    for m in queryset:
+        bundle = resource.build_bundle(obj=m, request=request)
+        bundle = resource.full_dehydrate(bundle)
         objects.append(bundle)
+    return resource.serialize(None, objects, 'application/json')
 
-    context = {'workspecs' : ws.serialize(None, objects, 'application/json')}
+def index(request):
+    addresses = all_resources(request, AddressResource(), Address.objects.all())
+    ws = all_resources(request, MapSearchResource(), WorkSpec.objects.all())
+    context = {'addresses': addresses,
+               'workspecs' : ws}
     return render(request, 'index.html', context)
