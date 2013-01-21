@@ -36,6 +36,11 @@ def process_item(item):
     ws.raw_phid = raw_phid
     ws.shortname = shortname
     ws.url = url
+    ws.institution_name = item['institution_name']
+    ws.institution_description = item['institution_description']
+    ws.job_title = item['job_title']
+    ws.job_functions = item['job_functions_list']
+    ws.activity_domain = item['activity_domain']
     ws.save()
 ##
 items = map(process_item, items)

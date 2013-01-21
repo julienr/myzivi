@@ -2,11 +2,14 @@
 import ziviscrap.settings as settings
 import json
 import logging
+import multiprocessing
+from datetime import datetime
 import os, urlparse
 from scrapy.selector import HtmlXPathSelector
 import time
 import collections
 import ziviscrap.geocode as geocode
+import ziviscrap.translations as translations
 
 ## Find duplicates
 def filter_duplicates(items):
@@ -20,6 +23,12 @@ def filter_duplicates(items):
     return itemdict.values()
 
 ##
+def parse_date_range(txt):
+    start, end = txt.strip().split('-')
+    start = datetime.strptime(start, '%d.%m.%Y').isoformat()
+    end = datetime.strptime(end, '%d.%m.%Y').isoformat()
+    return (start, end)
+
 def parse_item(item):
     phid = item['phid']
     detailfile = os.path.join(settings.DETAIL_HTML_DIR, 'detail_%s.html'%phid)
@@ -51,12 +60,16 @@ def parse_item(item):
 
     data['ws_number'] = span_text("workSpecificationNumberValue")
     data['institution_number'] = span_text("EIBNumberValue")
-    data['activity_field'] = span_text("fieldOfActivityValue")
+    data['activity_domain'] = translations.to_activity_domain(
+            span_text("fieldOfActivityValue"))
     data['priority_program'] = span_text("schwerpunktProgramValue")
     data['job_function_category'] = span_text("functionsValue")
     data['place_of_work'] = span_text("placeOfWorkValue")
     data['work_abroad'] = span_text("workAbroadValue")
-    # TODO: Parse free periods
+    data['available_dates'] = hxs.select('//span[contains(@id, ' +
+        '"freePeriodsLabel")]/following::table[1]//span/text()').extract()
+    data['available_dates'] = [parse_date_range(d)
+                               for d in data['available_dates']]
     return data
 
 def geocode_item(item):
@@ -71,6 +84,11 @@ def geocode_item(item):
         newitem['address'] = None
     return newitem
 
+def translate_item(item):
+    """Translate various item entries"""
+    data = item.copy()
+#    data['activity_field']
+
 ## Load Items from the scraper
 jsonfile = urlparse.urlparse(settings.FEED_URI).path
 with open(jsonfile) as f:
@@ -78,9 +96,11 @@ with open(jsonfile) as f:
 
 items = filter_duplicates(items)
 
-items = map(parse_item, items)
-items = map(geocode_item, items)
-# Remove items with empty addresses
+## items transformations
+pool = multiprocessing.Pool(5)
+items = pool.map(parse_item, items)
+items = pool.map(geocode_item, items)
+## Remove items with empty addresses
 items = filter(lambda i: i['address'] is not None, items)
 
 ## Save items completed with address

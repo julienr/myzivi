@@ -25,6 +25,15 @@ class WorkSpec(models.Model):
     institution_description = models.TextField()
     job_title = models.TextField()
     job_functions = models.TextField()
+    DOMAIN_CHOICES = (
+            (u'health' , u'Health'), (u'social' , u'Social'),
+            (u'culture' , u'Culture'), (u'nature' , u'Nature protection'),
+            (u'forest' , u'Forest work'), (u'agriculture' , u'Agriculture'),
+            (u'dev_cooperation' , u'Development & cooperation'),
+            (u'disaster_help' , u'Disasters help')
+    )
+    activity_domain = models.CharField(max_length=20, choices=DOMAIN_CHOICES)
+    # TODO: Handle multiple start/end dates
 
     def __unicode__(self):
         return u"[%s] %s" % (self.phid, self.shortname)
