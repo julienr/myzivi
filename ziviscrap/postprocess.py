@@ -68,7 +68,7 @@ def geocode_item(item):
     except geocode.GeocodingError as e:
         logging.exception('Error geocoding phid=%s, place_of_work=%s : %s ' + \
                           '(geourl:[%s])', phid, place_of_work, e, e.url)
-        newitem['address'] = ''
+        newitem['address'] = None
     return newitem
 
 ## Load Items from the scraper
@@ -80,6 +80,8 @@ items = filter_duplicates(items)
 
 items = map(parse_item, items)
 items = map(geocode_item, items)
+# Remove items with empty addresses
+items = filter(lambda i: i['address'] is not None, items)
 
 ## Save items completed with address
 outfile = os.path.join(os.path.dirname(jsonfile), 'final_items.json')

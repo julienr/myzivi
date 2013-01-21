@@ -20,5 +20,11 @@ class WorkSpec(models.Model):
     created = models.DateField(auto_now_add=True)
     modified = models.DateField(auto_now=True)
 
+    # Additional data from webpage
+    institution_name = models.TextField()
+    institution_description = models.TextField()
+    job_title = models.TextField()
+    job_functions = models.TextField()
+
     def __unicode__(self):
         return u"[%s] %s" % (self.phid, self.shortname)
