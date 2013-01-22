@@ -217,9 +217,9 @@ function initMap(initialWorkspecs, initialAddresses, N) {
     N.addresses = new N.AddressList(initialAddresses);
     N.workspecs = new N.WorkSpecList();
 
-    N.listview = new N.ListView({
-        collection: N.workspecs
-    });
+    //N.listview = new N.ListView({
+        //collection: N.workspecs
+    //});
 
     N.mapview = new N.MapView({
         collection: N.workspecs,

@@ -31,7 +31,11 @@
 {% endblock %}
 
 {% block sidebar %}
-<div id="maplist">
-    <ul id="workspec-list"></ul>
-</div>
+<form action="{% url zivimap.views.search %}" method="GET">
+    {{ search_form.as_ul }}
+    <input type="submit" value="Search" />
+</form>
+<!--<div id="maplist">-->
+    <!--<ul id="workspec-list"></ul>-->
+<!--</div>-->
 {% endblock %}
