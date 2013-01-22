@@ -13,24 +13,12 @@ def all_resources(request, resource, queryset):
         objects.append(bundle)
     return resource.serialize(None, objects, 'application/json')
 
-#def index(request):
-    #addresses = all_resources(request, AddressResource(), Address.objects.all())
-    #ws = all_resources(request, MapSearchResource(), WorkSpec.objects.all())
-    #context = {'addresses': addresses,
-               #'workspecs' : ws}
-    #return render(request, 'index.html', context)
-
-def index(request):
-    form = SearchForm()
-    context = {'search_form' : form}
-    return render(request, 'index.html', context)
-
-
 class SearchForm(forms.Form):
-    domains = forms.MultipleChoiceField(required=False, choices=WorkSpec.DOMAIN_CHOICES,
+    domains = forms.MultipleChoiceField(required=False,
+            choices=WorkSpec.DOMAIN_CHOICES,
             widget=forms.CheckboxSelectMultiple)
 
-def search(request):
+def index(request):
     form = SearchForm(request.GET)
     if form.is_valid():
         cd = form.cleaned_data
@@ -48,5 +36,3 @@ def search(request):
         return render(request, 'index.html', context)
     else:
         return redirect('index')
-
-

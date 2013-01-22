@@ -18,7 +18,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Zivigo</a>
+          <a class="brand" href="#">myzivi.ch</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
@@ -32,19 +32,14 @@
   </div>-->
       <div class="container-fluid">
           <div class="row-fluid">
-             <!--<div class="span3">-->
-                  <!--<ul class="nav nav-list">-->
-                    <!--<li class="nav-header">Filters</li>-->
-                  <!--</ul>-->
-              <!--</div>-->
-              <div class="span9">
-                  {% block content %}{% endblock %}
-              </div>
               <div class="span3">
                   <ul class="nav nav-list">
-                      <li class="nav-header">Jobs</li>
+                      <li class="nav-header">Filters</li>
                       {% block sidebar %}{% endblock %}
                   </ul>
+              </div>
+              <div class="span9">
+                  {% block content %}{% endblock %}
               </div>
           </div>
       </div>

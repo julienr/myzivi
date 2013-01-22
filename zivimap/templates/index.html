@@ -31,7 +31,7 @@
 {% endblock %}
 
 {% block sidebar %}
-<form action="{% url zivimap.views.search %}" method="GET">
+<form action="{% url zivimap.views.index %}" method="GET">
     {{ search_form.as_ul }}
     <input type="submit" value="Search" />
 </form>

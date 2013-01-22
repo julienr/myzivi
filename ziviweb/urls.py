@@ -15,6 +15,7 @@ v1_api.register(MapSearchResource())
 print v1_api.urls
 
 urlpatterns = patterns('',
+    url(r'^$', 'zivimap.views.index'),
     url(r'^map/', include('zivimap.urls')),
     url(r'^api/', include(v1_api.urls)),
     # Examples:
