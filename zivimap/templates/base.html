@@ -31,19 +31,8 @@
 <!--    <div class="hero-unit">
   </div>-->
       <div class="container-fluid">
-          <div class="row-fluid">
-              <div class="span3">
-                  <ul class="nav nav-list">
-                      <li class="nav-header">Filters</li>
-                      {% block sidebar %}{% endblock %}
-                  </ul>
-              </div>
-              <div class="span9">
-                  {% block content %}{% endblock %}
-              </div>
-          </div>
+        {% block content %}{% endblock %}
       </div>
-
     <!-- Javascript -->
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBsyGBE5AMjlj5eYNQR6_FmgeM54rDPi58&sensor=false">
