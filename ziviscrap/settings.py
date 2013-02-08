@@ -5,6 +5,9 @@
 #
 #     http://doc.scrapy.org/topics/settings.html
 #
+import os
+
+assert 'SCRAPY_DATA_DIR' in os.environ
 
 BOT_NAME = 'ziviscrap'
 
@@ -12,13 +15,14 @@ SPIDER_MODULES = ['ziviscrap.spiders']
 NEWSPIDER_MODULE = 'ziviscrap.spiders'
 
 LOG_LEVEL = 'INFO'
-DATA_DIR = '/home/julien/dev/zivi/_data/scraped/'
-DETAIL_HTML_DIR = DATA_DIR + 'detail_html/'
+DATA_DIR = os.path.abspath(os.environ['SCRAPY_DATA_DIR'])
+print 'DATA_DIR : ', DATA_DIR
+DETAIL_HTML_DIR = os.path.join(DATA_DIR, 'detail_html')
 
 FEED_FORMAT = 'json'
-FEED_URI = 'file://' + DATA_DIR + 'items.json'
+FEED_URI = 'file://' + os.path.join(DATA_DIR, 'items.json')
 
-LOG_FILE = DATA_DIR + 'log.txt'
+LOG_FILE = os.path.join(DATA_DIR, 'log.txt')
 LOG_LEVEL = 'DEBUG'
 
 DOWNLOAD_DELAY = 0.1
