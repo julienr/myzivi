@@ -35,7 +35,13 @@ def process_item(item):
     # Create or update into DB
     addr, created = Address.objects.get_or_create(canton=canton,
             locality=locality, defaults={'latitude':lat, 'longitude':lng})
-    ws, created = WorkSpec.objects.get_or_create(phid=phid, address=addr)
+    # Now, the address of the workspec might have changed, in which case
+    # we need to delete the old workspec and create a new one
+    try:
+        ws = WorkSpec.objects.get(phid=phid)
+        ws.address = addr
+    except WorkSpec.DoesNotExist:
+        ws = WorkSpec(phid=phid, address=addr)
     ws.raw_phid = raw_phid
     ws.shortname = shortname
     ws.url = url
