@@ -45,7 +45,7 @@ def parse_item(item):
             return r[0]
         else:
             logging.info('No "%s" found for phid : %s' % (id, phid))
-            return {}
+            return ""
 
     data = item.copy()
     data['institution_name'] = span_text("EIBName")
