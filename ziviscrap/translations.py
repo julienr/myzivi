@@ -31,7 +31,8 @@ ACTIVITY_DOMAIN = {
         'de':u'Bewältigung von Katastrophen und Notlagen'}
 }
 
-ACTIVITY_DOMAIN_REVERSE = {v[1]:k for k, values in ACTIVITY_DOMAIN.items() for v in values.items()}
+ACTIVITY_DOMAIN_REVERSE = dict((v[1], k)
+        for k, values in ACTIVITY_DOMAIN.items() for v in values.items())
 
 def to_activity_domain(txt):
     key = txt.strip()
