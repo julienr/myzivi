@@ -1,0 +1,6 @@
+Restart website after update :
+init/myzivi restart
+
+Run import_items :
+SCRAPY_DATA_DIR="_data/scraped_2013-02-09-16:34:01/" DJANGO_SETTINGS_MODULE=ziviweb.settings_deployment ./r
+un.sh -m pdb zivimap/import_items.py
