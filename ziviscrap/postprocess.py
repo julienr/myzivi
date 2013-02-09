@@ -104,10 +104,12 @@ items = filter_duplicates(items)
 def remove_empty(items):
     return filter(lambda d: len(d) > 0, items)
 
-pool = multiprocessing.Pool(5)
-items = pool.map(parse_item, items)
+#pool = multiprocessing.Pool(5)
+#items = pool.map(parse_item, items)
+items = map(parse_item, items)
 items = remove_empty(items)
-items = pool.map(geocode_item, items)
+#items = pool.map(geocode_item, items)
+items = map(geocode_item, items)
 items = remove_empty(items)
 
 ## Remove items with empty addresses
