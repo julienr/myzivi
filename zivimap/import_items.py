@@ -35,7 +35,8 @@ def process_item(item):
     # Create or update into DB
     addr, created = Address.objects.get_or_create(canton=canton,
             locality=locality, defaults={'latitude':lat, 'longitude':lng})
-    ws, created = WorkSpec.objects.get_or_create(phid=phid, address=addr)
+    ws, created = WorkSpec.objects.get_or_create(phid=phid)
+    ws.address = addr
     ws.raw_phid = raw_phid
     ws.shortname = shortname
     ws.url = url
