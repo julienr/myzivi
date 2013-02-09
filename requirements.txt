@@ -2,6 +2,6 @@
 django.js
 django-tastypie
 wadofstuff-django-serializers
-shove
 sqlalchemy
 scrapy
+shove

@@ -7,9 +7,12 @@ setup_environ(settings)
 from zivimap.models import WorkSpec, Address
 import json
 import urlparse
+
+import os
+import ziviscrap.settings as scrap_settings
 ##
 ZIVI_DOMAIN = "http://www.eis.zivi.admin.ch"
-INPUT_FILE = "/home/julien/dev/zivi/_data/scraped/final_items.json"
+INPUT_FILE = os.path.join(scrap_settings.DATA_DIR, "final_items.json")
 
 with open(INPUT_FILE) as f:
     items = json.load(f)

@@ -32,6 +32,10 @@ def parse_date_range(txt):
 def parse_item(item):
     phid = item['phid']
     detailfile = os.path.join(settings.DETAIL_HTML_DIR, 'detail_%s.html'%phid)
+    if not os.path.exists(detailfile):
+        logging.info('File not found %s' % detailfile)
+        return {}
+
     with open(detailfile) as f:
         detail = f.read()
     hxs = HtmlXPathSelector(text=detail)
@@ -41,7 +45,7 @@ def parse_item(item):
             return r[0]
         else:
             logging.info('No "%s" found for phid : %s' % (id, phid))
-            return ""
+            return {}
 
     data = item.copy()
     data['institution_name'] = span_text("EIBName")
@@ -97,9 +101,15 @@ with open(jsonfile) as f:
 items = filter_duplicates(items)
 
 ## items transformations
+def remove_empty(items):
+    return filter(lambda d: len(d) > 0, items)
+
 pool = multiprocessing.Pool(5)
 items = pool.map(parse_item, items)
+items = remove_empty(items)
 items = pool.map(geocode_item, items)
+items = remove_empty(items)
+
 ## Remove items with empty addresses
 items = filter(lambda i: i['address'] is not None, items)
 
