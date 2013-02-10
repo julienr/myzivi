@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^$', 'zivimap.views.index'),
     url(r'^map/', include('zivimap.urls')),
     url(r'^api/', include(v1_api.urls)),
+    url(r'', include('webmaster_verification.urls')),
     # Examples:
     # url(r'^$', 'ziviweb.views.home', name='home'),
     # url(r'^ziviweb/', include('ziviweb.foo.urls')),

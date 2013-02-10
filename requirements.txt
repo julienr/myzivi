@@ -5,3 +5,4 @@ wadofstuff-django-serializers
 sqlalchemy
 scrapy
 shove
+django-webmaster-verification

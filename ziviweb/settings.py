@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     'djangojs',
     # https://github.com/PaulUithol/backbone-tastypie
     'backbone_tastypie',
+    'webmaster_verification',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -162,4 +163,8 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+WEBMASTER_VERIFICATION = {
+    'google' : 'google5c13ce7ee2074c70',
 }
