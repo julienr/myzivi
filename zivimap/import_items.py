@@ -1,8 +1,9 @@
 ##
 import re
 from django.core.management import setup_environ
-from ziviweb import settings
-setup_environ(settings)
+from django.conf import settings
+#from ziviweb import settings
+#setup_environ(settings)
 
 from zivimap.models import WorkSpec, Address
 import json
