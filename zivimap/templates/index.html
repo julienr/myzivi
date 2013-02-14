@@ -34,27 +34,13 @@
 <div id="map_canvas"></div>
 
 <div id="filters_overlay">
-  <div id="filters_container">
-    <ul class="nav nav-list">
-    <li class="nav-header">Filters</li>
-    <form action="{% url zivimap.views.index %}" method="GET">
-        {{ search_form.as_ul }}
-        <input type="submit" value="Search" />
-    </form>
-
-    {% comment %}
-    <form>
-      <div id="search_accordion">
-        <h3><a href="#">Domains</a></h3>
-        <div>{{ search_form.domains }}</div>
-        <h3><a href="#">Test</a></h3>
-        <div>Blah</div>
-      </div>
-      <input type="submit" value="Search" />
-    </form>
-    {% endcomment %}
-    </ul>
-  </div>
-
+    <div id="filters_container">
+            <form action="{% url zivimap.views.index %}" method="GET">
+                <ul id="search_form">
+                    {{ search_form.as_ul }}
+                </ul>
+                <input class="btn btn-primary" type="submit" value="Search" />
+            </form>
+    </div>
 </div>
 {% endblock %}
