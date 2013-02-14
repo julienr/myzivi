@@ -4,8 +4,8 @@ from tastypie.api import Api
 import ziviweb.settings as settings
 
 # Uncomment the next two lines to enable the admin:
-from django.contrib import admin
-admin.autodiscover()
+#from django.contrib import admin
+#admin.autodiscover()
 
 v1_api = Api(api_name=settings.API_VERSION)
 v1_api.register(AddressResource())
@@ -27,5 +27,5 @@ urlpatterns = patterns('',
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
+    #url(r'^admin/', include(admin.site.urls)),
 )
