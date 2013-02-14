@@ -1,4 +1,5 @@
 import os
+from django.conf import global_settings
 # Django settings for ziviweb project.
 
 DEBUG = True
@@ -94,6 +95,10 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
 #     'django.template.loaders.eggs.Loader',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+    'zivimap.processor.add_stats',
 )
 
 MIDDLEWARE_CLASSES = (

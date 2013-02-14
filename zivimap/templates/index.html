@@ -35,12 +35,12 @@
 
 <div id="filters_overlay">
     <div id="filters_container">
-            <form action="{% url zivimap.views.index %}" method="GET">
-                <ul id="search_form">
-                    {{ search_form.as_ul }}
-                </ul>
-                <input class="btn btn-primary" type="submit" value="Search" />
-            </form>
+        <form action="{% url zivimap.views.index %}" method="GET">
+            <ul id="search_form">
+                {{ search_form.as_ul }}
+            </ul>
+            <input class="btn btn-primary" type="submit" value="Search" />
+        </form>
     </div>
 </div>
 {% endblock %}
