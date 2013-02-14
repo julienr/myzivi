@@ -1,5 +1,6 @@
 _data/
 env/
 *.pyc
+*.mo
 zividb
 ziviweb/static/

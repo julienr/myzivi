@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load js %}
+{% load i18n %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -21,14 +22,24 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">myzivi.ch | swiss civilian service search</a>
+          <a class="brand" href="#">myzivi.ch <br />
+              <span class="nav-small">{% trans "swiss civilian service search" %}</span></a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <!--<li class="active"><a href="#">Home</a></li>-->
               <li><a href="#aboutModal" data-toggle="modal">About</a></li>
             </ul>
             <ul class="nav pull-right">
-                <li><span class="nav-text">last update : {{ last_update }} | {{ num_workspecs }} assignments</span></li>
+              <li>
+                <span class="nav-text">last update : {{ last_update }} | {{ num_workspecs }} assignments</span></li>
+                <br />
+                {% get_available_languages as languages %}
+                {% for lang_code, lang_name in languages %}
+                  {% language lang_code %}
+                    <a class="nav-small" href="{% url zivimap.views.index %}">{{ lang_name }}</a>
+                  {% endlanguage %}
+                  {% endfor %}
+               </li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

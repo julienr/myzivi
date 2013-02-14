@@ -1,13 +1,22 @@
-body {
-}
-
 /* Allow to put text in navbar*/
 .nav-text {
     display: block;
-    padding: 10px 15px 10px;
+    /*padding: 10px 15px 10px;*/
     color: #999;
     text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
-    font-size: 10px;
+    font-size: 12px;
+}
+
+.nav-small {
+    font-size: 12px;
+}
+
+.nav li a.nav-small {
+    display: inline;
+    font-size: 12px;
+    padding: 0;
+    margin: 0;
+    /*margin-top: 10px;*/
 }
 
 #full_container {
