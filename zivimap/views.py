@@ -4,6 +4,8 @@ from django import forms
 from zivimap.api import *
 from zivimap.models import Address, WorkSpec
 from django.db.models import Q
+from django.conf import settings
+from django.utils import translation
 import json
 
 def all_resources(request, resource, queryset):
@@ -37,6 +39,10 @@ def build_workspecs_filter(search_form):
 
 
 def index(request):
+    # Save current language in session (in case the user used a i18n url)
+    lang = translation.get_language()
+    request.session['django_language'] = lang
+
     form = SearchForm(request.GET)
     if form.is_valid():
         cd = form.cleaned_data
