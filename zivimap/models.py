@@ -33,6 +33,13 @@ class WorkSpec(models.Model):
             (u'disaster_help' , u'Disasters help')
     )
     activity_domain = models.CharField(max_length=20, choices=DOMAIN_CHOICES)
+
+    LANG_CHOICES = (
+            ('fr', 'French'),
+            ('de', 'German'),
+            ('it', 'Italian'),
+    )
+    language = models.CharField(max_length=20, choices=LANG_CHOICES)
     # TODO: Handle multiple start/end dates
 
     def __unicode__(self):

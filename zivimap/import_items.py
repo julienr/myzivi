@@ -50,6 +50,7 @@ def process_item(item):
     ws.job_title = item['job_title']
     ws.job_functions = item['job_functions_list']
     ws.activity_domain = item['activity_domain']
+    ws.language = item['lang']
     ws.save()
 ##
 items = map(process_item, items)

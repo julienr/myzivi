@@ -10,6 +10,7 @@ import time
 import collections
 import ziviscrap.geocode as geocode
 import ziviscrap.translations as translations
+import guess_language
 
 ## Find duplicates
 def filter_duplicates(items):
@@ -93,6 +94,19 @@ def translate_item(item):
     data = item.copy()
 #    data['activity_field']
 
+def add_lang(item):
+    """Guess language for item"""
+    lang = guess_language.guessLanguage(item['institution_description'])
+    if lang == 'UNKNOWN':
+        lang = guess_language.guessLanguage(item['job_functions_list'])
+
+    if lang == 'UNKNOWN':
+        logging.info('No language found for item %s' % item['phid'])
+        return {}
+    item['lang'] = lang
+    return item
+
+
 ## Load Items from the scraper
 jsonfile = urlparse.urlparse(settings.FEED_URI).path
 with open(jsonfile) as f:
@@ -110,6 +124,8 @@ items = map(parse_item, items)
 items = remove_empty(items)
 #items = pool.map(geocode_item, items)
 items = map(geocode_item, items)
+items = remove_empty(items)
+items = map(add_lang, items)
 items = remove_empty(items)
 
 ## Remove items with empty addresses

@@ -3,6 +3,7 @@ from django.core import serializers
 from django import forms
 from zivimap.api import *
 from zivimap.models import Address, WorkSpec
+from django.db.models import Q
 import json
 
 def all_resources(request, resource, queryset):
@@ -17,6 +18,23 @@ class SearchForm(forms.Form):
     domains = forms.MultipleChoiceField(required=False,
             choices=WorkSpec.DOMAIN_CHOICES,
             widget=forms.CheckboxSelectMultiple)
+    languages = forms.MultipleChoiceField(required=False,
+            choices=WorkSpec.LANG_CHOICES,
+            widget=forms.CheckboxSelectMultiple)
+
+def build_workspecs_filter(search_form):
+    """Return a filter dict based on SearchForm cleaned_data"""
+    assert search_form.is_valid()
+    cd = search_form.cleaned_data
+    Qfilters = Q()
+    domains = cd['domains']
+    if len(domains) > 0:
+        Qfilters &= Q(activity_domain__in=domains)
+    languages = cd['languages']
+    if len(languages) > 0:
+        Qfilters &= Q(language__in=languages)
+    return Qfilters
+
 
 def index(request):
     form = SearchForm(request.GET)
@@ -25,10 +43,8 @@ def index(request):
         domains = cd['domains']
         addresses = all_resources(request, AddressResource(),
                                   Address.objects.all())
-        if len(domains) == 0:
-            wsq = WorkSpec.objects.all()
-        else:
-            wsq = WorkSpec.objects.filter(activity_domain__in=domains)
+        Qws = build_workspecs_filter(form)
+        wsq = WorkSpec.objects.filter(Qws)
         ws = all_resources(request, MapSearchResource(), wsq)
         context = {'addresses': addresses,
                    'workspecs' : ws,
