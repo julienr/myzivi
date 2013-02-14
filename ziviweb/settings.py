@@ -139,6 +139,7 @@ INSTALLED_APPS = (
     # https://github.com/PaulUithol/backbone-tastypie
     'backbone_tastypie',
     'webmaster_verification',
+    'raven.contrib.django.raven_compat',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -149,27 +150,58 @@ INSTALLED_APPS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'root': {
+        'level': 'WARNING',
+        'handlers': ['sentry'],
+     },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
     'handlers': {
-        'mail_admins': {
+        'sentry': {
             'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+            'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
         }
+        #'mail_admins': {
+            #'level': 'ERROR',
+            #'filters': ['require_debug_false'],
+            #'class': 'django.utils.log.AdminEmailHandler'
+        #}
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
+        #'django.request': {
+            #'handlers': ['mail_admins'],
+            #'level': 'ERROR',
+            #'propagate': True,
+        #},
+        'django.db.backends':{
             'level': 'ERROR',
-            'propagate': True,
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'raven': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
+        },
+        'sentry.errors': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False,
         },
     }
 }
 
 WEBMASTER_VERIFICATION = {
     'google' : 'google5c13ce7ee2074c70',
+}
+
+RAVEN_CONFIG = {
+    'dsn': os.environ['SENTRY_DSN']
 }

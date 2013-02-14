@@ -6,6 +6,11 @@
 #     http://doc.scrapy.org/topics/settings.html
 #
 import os
+from raven.handlers.logging import SentryHandler
+from raven.conf import setup_logging
+import ziviweb.settings
+handler = SentryHandler(ziviweb.settings.RAVEN_CONFIG['dsn'])
+setup_logging(handler)
 
 assert 'SCRAPY_DATA_DIR' in os.environ
 

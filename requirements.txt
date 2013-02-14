@@ -7,3 +7,5 @@ scrapy
 shove
 django-webmaster-verification
 -e git+https://github.com/dsc/guess-language.git#egg=guess_language
+sentry
+raven
