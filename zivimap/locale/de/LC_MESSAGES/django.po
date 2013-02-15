@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-14 22:36+0100\n"
+"POT-Creation-Date: 2013-02-15 18:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,36 +20,67 @@ msgstr ""
 
 #: models.py:30
 msgid "Health"
-msgstr ""
+msgstr "Gesundheitswesen"
 
 #: models.py:30
 msgid "Social"
-msgstr ""
+msgstr "Sozialwesen"
 
 #: models.py:31
 msgid "Culture"
-msgstr ""
+msgstr "Kulturgütererhaltung"
 
 #: models.py:31
 msgid "Nature protection"
-msgstr ""
+msgstr "Umwelt- und Naturschutz"
 
 #: models.py:32
 msgid "Forest work"
-msgstr ""
+msgstr "Forstwesen"
 
 #: models.py:32
 msgid "Agriculture"
-msgstr ""
+msgstr "Landwirtschaft"
 
 #: models.py:33
 msgid "Development & cooperation"
-msgstr ""
+msgstr "Entwicklungszusammenar..."
 
 #: models.py:34
 msgid "Disasters help"
+msgstr "Bewältigung von Katast..."
+
+#: views.py:24
+msgid "Domains"
+msgstr "Tätigkeitsbereich"
+
+#: views.py:28
+msgid "Languages"
+msgstr "Sprache"
+
+#: templates/base.html:36
+msgid "swiss civilian service search"
+msgstr "Schweizer zivildienst einsatz suche"
+
+#: templates/base.html:68
+#, python-format
+msgid ""
+"\n"
+"      Looks like you're new here ! This website let you search for available "
+"swiss civilian service assignments. <br />\n"
+"\n"
+"      The data comes from the official <a href=\"%(eis_url)s\">EIS/SIA</a> "
+"webpage. <br />\n"
+"\n"
+"      For more information, click on \"About\".\n"
+"      "
 msgstr ""
 
-#: templates/base.html:25
-msgid "swiss civilian service search"
-msgstr ""
+#: templates/index.html:45
+#, fuzzy
+msgid "Search options"
+msgstr "Suchen"
+
+#: templates/index.html:50
+msgid "Search"
+msgstr "Suchen"

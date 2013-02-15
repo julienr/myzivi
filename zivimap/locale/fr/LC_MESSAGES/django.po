@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-14 22:36+0100\n"
+"POT-Creation-Date: 2013-02-15 18:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,6 +50,46 @@ msgstr "Développement & coopéeration"
 msgid "Disasters help"
 msgstr "Aide en cas de catastrophe"
 
-#: templates/base.html:25
+#: views.py:24
+msgid "Domains"
+msgstr "Domaines"
+
+#: views.py:28
+msgid "Languages"
+msgstr "Langue"
+
+#: templates/base.html:36
 msgid "swiss civilian service search"
 msgstr "recherche d'affectations pour le service civil suisse"
+
+#: templates/base.html:68
+#, python-format
+msgid ""
+"\n"
+"      Looks like you're new here ! This website let you search for available "
+"swiss civilian service assignments. <br />\n"
+"\n"
+"      The data comes from the official <a href=\"%(eis_url)s\">EIS/SIA</a> "
+"webpage. <br />\n"
+"\n"
+"      For more information, click on \"About\".\n"
+"      "
+msgstr ""
+"\n"
+"      Il semble que tu sois nouveau ici ! Ce site te permets de chercher des "
+"affectations pour le service civil suisse en les visualisant sur une carte ."
+"<br />\n"
+"\n"
+"      Les données viennent du site officiel <a href=\"%(eis_url)s\">EIS/SIA</"
+"a> <br />\n"
+"\n"
+"      Pour plus d'informations, cliques sur \"About\".\n"
+"      "
+
+#: templates/index.html:45
+msgid "Search options"
+msgstr "Options de recherche"
+
+#: templates/index.html:50
+msgid "Search"
+msgstr "Chercher"

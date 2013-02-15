@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block javascript %}
 <script type="text/javascript"
@@ -41,11 +42,12 @@
 
 <div id="filters_overlay">
     <div id="filters_container">
+        <h4>{% trans 'Search options' %}</h4>
         <form action="{% url zivimap.views.index %}" method="GET">
             <ul id="search_form">
                 {{ search_form.as_ul }}
             </ul>
-            <input class="btn btn-primary" type="submit" value="Search" />
+            <input class="btn btn-primary" type="submit" value="{% trans 'Search' %}" />
         </form>
 
         <!-- Social buttons -->
