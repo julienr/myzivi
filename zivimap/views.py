@@ -6,6 +6,7 @@ from zivimap.models import Address, WorkSpec
 from django.db.models import Q
 from django.conf import settings
 from django.utils import translation
+from django.utils.translation import ugettext_lazy as _
 import json
 
 def all_resources(request, resource, queryset):
@@ -19,10 +20,12 @@ def all_resources(request, resource, queryset):
 class SearchForm(forms.Form):
     domains = forms.MultipleChoiceField(required=False,
             choices=WorkSpec.DOMAIN_CHOICES,
-            widget=forms.CheckboxSelectMultiple)
+            widget=forms.CheckboxSelectMultiple,
+            label=_('Domains'))
     languages = forms.MultipleChoiceField(required=False,
             choices=WorkSpec.LANG_CHOICES,
-            widget=forms.CheckboxSelectMultiple)
+            widget=forms.CheckboxSelectMultiple,
+            label=_('Languages'))
 
 def build_workspecs_filter(search_form):
     """Return a filter dict based on SearchForm cleaned_data"""
