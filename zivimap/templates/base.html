@@ -14,6 +14,15 @@
           <title>myzivi.ch | swiss civilian service search</title>
   </head>
   <body>
+    {% comment %}
+    <div id="headerbar">
+      <div class="box">
+        <p class="hoverable"><a class="brand" href="{% url zivimap.views.index %}">myzivi.ch</a></p>
+        <p class="nav-small">{% trans "swiss civilian service search" %}</p>
+      </div>
+    </div>
+    {% endcomment %}
+
     <div id="top_navbar" class="navbar navbar-inverse navbar-static-top">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -31,20 +40,40 @@
             </ul>
             <ul class="nav pull-right">
               <li>
-                <span class="nav-text">last update : {{ last_update }} | {{ num_workspecs }} assignments</span></li>
-                <br />
-                {% get_available_languages as languages %}
-                {% for lang_code, lang_name in languages %}
-                  {% language lang_code %}
-                    <a class="nav-small" href="{% url zivimap.views.index %}">{{ lang_name }}</a>
-                  {% endlanguage %}
+                <p class="nav-text">last update : {{ last_update }} | {{ num_workspecs }} assignments
+                  <br />
+                  {% get_available_languages as languages %}
+                  {% for lang_code, lang_name in languages %}
+                    {% language lang_code %}
+                      <a class="nav-small" href="{% url zivimap.views.index %}">{{ lang_name }}</a>
+                      {% if not forloop.last %}
+                       |
+                      {% endif %}
+                    {% endlanguage %}
                   {% endfor %}
+                 </p>
                </li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
+
+    {% if first_time_message %}
+    <div class="alert alert-info fade in">
+      <button class="close" data-dismiss="alert" type="button">×</button>
+      <h1>Hey ! </h1>
+      <p>
+      {% blocktrans with eis_url="https://www.eis.zivi.admin.ch/ZiviEis/default.aspx?lang=fr" %}
+      Looks like you're new here ! This website let you search for available swiss civilian service assignments. <br />
+
+      The data comes from the official <a href="{{eis_url}}">EIS/SIA</a> webpage. <br />
+
+      For more information, click on "About".
+      {% endblocktrans %}
+      </p>
+    </div>
+    {% endif %}
     <div id="full_container">
         {% block content %}{% endblock %}
     </div>
