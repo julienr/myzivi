@@ -4,3 +4,4 @@ env/
 *.mo
 zividb
 ziviweb/static/
+tunnel_sentry.sh
