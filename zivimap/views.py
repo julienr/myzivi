@@ -52,9 +52,12 @@ def index(request):
         Qws = build_workspecs_filter(form)
         wsq = WorkSpec.objects.filter(Qws)
         ws = all_resources(request, MapSearchResource(), wsq)
+        first_time_message = not request.session.get('visited', False)
+        request.session['visited'] = True
         context = {'addresses': addresses,
                    'workspecs' : ws,
-                   'search_form' : form}
+                   'search_form' : form,
+                   'first_time_message' : first_time_message}
         return render(request, 'index.html', context)
     else:
         return redirect('index')
