@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^api/', include(v1_api.urls)),
     url(r'', include('webmaster_verification.urls')),
     url(r'i18n/', include('django.conf.urls.i18n')),
+    url(r'^sitemap\.xml$', 'zivimap.views.sitemap'),
     # Examples:
     # url(r'^$', 'ziviweb.views.home', name='home'),
     # url(r'^ziviweb/', include('ziviweb.foo.urls')),

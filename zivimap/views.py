@@ -41,6 +41,9 @@ def build_workspecs_filter(search_form):
     return Qfilters
 
 
+def sitemap(request):
+    return render(request, 'sitemap.xml')
+
 def index(request):
     # Save current language in session (in case the user used a i18n url)
     lang = translation.get_language()
@@ -64,3 +67,5 @@ def index(request):
         return render(request, 'index.html', context)
     else:
         return redirect('index')
+
+
