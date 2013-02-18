@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-15 18:53+0100\n"
+"POT-Creation-Date: 2013-02-18 17:50+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,11 +58,11 @@ msgstr "Tätigkeitsbereich"
 msgid "Languages"
 msgstr "Sprache"
 
-#: templates/base.html:36
+#: templates/base.html:14 templates/base.html.py:26
 msgid "swiss civilian service search"
 msgstr "Schweizer zivildienst einsatz suche"
 
-#: templates/base.html:68
+#: templates/base.html:58
 #, python-format
 msgid ""
 "\n"
