@@ -1,0 +1,16 @@
+{% load i18n %}
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>http://myzivi.ch</loc>
+        <changefreq>daily</changefreq>
+    </url>
+    {% get_available_languages as languages %}
+    {% for lang_code, lang_name in languages %}
+        <url>
+            <loc>http://myzivi.ch/{{ lang_code }}</loc>
+            <changefreq>daily</changefreq>
+        </url>
+    {% endfor %}
+</urlset>
+    
