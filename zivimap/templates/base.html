@@ -11,18 +11,9 @@
           rel="stylesheet" media="screen">
     <link href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css"
           rel="stylesheet" media="screen">
-          <title>myzivi.ch | swiss civilian service search</title>
+          <title>myzivi.ch | {% trans 'swiss civilian service search' %}</title>
   </head>
   <body>
-    {% comment %}
-    <div id="headerbar">
-      <div class="box">
-        <p class="hoverable"><a class="brand" href="{% url zivimap.views.index %}">myzivi.ch</a></p>
-        <p class="nav-small">{% trans "swiss civilian service search" %}</p>
-      </div>
-    </div>
-    {% endcomment %}
-
     <div id="top_navbar" class="navbar navbar-inverse navbar-static-top">
       <div class="navbar-inner">
         <div class="container-fluid">
@@ -32,7 +23,7 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="#">myzivi.ch <br />
-              <span class="nav-small">{% trans "swiss civilian service search" %}</span></a>
+              <span class="nav-small">{% trans 'swiss civilian service search' %}</span></a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <!--<li class="active"><a href="#">Home</a></li>-->
