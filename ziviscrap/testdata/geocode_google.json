@@ -1,0 +1,54 @@
+{
+   "_comment" : "http://maps.googleapis.com/maps/api/geocode/json?address=Estavayer-le-lac&sensor=false&region=ch",
+   "results" : [
+      {
+         "address_components" : [
+            {
+               "long_name" : "Estavayer-le-Lac",
+               "short_name" : "Estavayer-le-Lac",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "La Broye",
+               "short_name" : "La Broye",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "Canton of Fribourg",
+               "short_name" : "FR",
+               "types" : [ "administrative_area_level_1", "political" ]
+            },
+            {
+               "long_name" : "Switzerland",
+               "short_name" : "CH",
+               "types" : [ "country", "political" ]
+            },
+            {
+               "long_name" : "1470",
+               "short_name" : "1470",
+               "types" : [ "postal_code" ]
+            }
+         ],
+         "formatted_address" : "1470 Estavayer-le-Lac, Switzerland",
+         "geometry" : {
+            "location" : {
+               "lat" : 46.849340,
+               "lng" : 6.847530000000001
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 46.85697060,
+                  "lng" : 6.863537399999999
+               },
+               "southwest" : {
+                  "lat" : 46.84170830,
+                  "lng" : 6.83152260
+               }
+            }
+         },
+         "types" : [ "locality", "political" ]
+      }
+   ],
+   "status" : "OK"
+}
