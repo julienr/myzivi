@@ -67,7 +67,7 @@ def parse_item(item):
     data['institution_number'] = span_text("EIBNumberValue")
     data['activity_domain'] = translations.to_activity_domain(
             span_text("fieldOfActivityValue"))
-    data['priority_program'] = span_text("schwerpunktProgramValue")
+    data['priority_program'] = span_text("schwerpunktProgrammValue")
     data['job_function_category'] = span_text("functionsValue")
     data['place_of_work'] = span_text("placeOfWorkValue")
     data['work_abroad'] = span_text("workAbroadValue")

@@ -104,11 +104,13 @@ def _nominatim_geocode(address):
         raise GeocodingError('Keyerror : %s' %e, url=url)
 
 def geocode_address(raw_address):
-    #address = _google_geocode(raw_address)
     if raw_address in geocache:
         return geocache[raw_address]
     else:
-        address = _nominatim_geocode(raw_address)
+        try:
+            address = _nominatim_geocode(raw_address)
+        except GeocodingError:
+            address = _google_geocode(raw_address)
         geocache[raw_address] = address
         return address
 

@@ -1,0 +1,109 @@
+[{
+    "_comment": "http://nominatim.openstreetmap.org/search?q=estavayer-le-lac&format=json&addressdetails=1&countrycodes=ch",
+    "place_id": "98235291",
+    "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http:\/\/www.openstreetmap.org\/copyright",
+    "osm_type": "relation",
+    "osm_id": "1683314",
+    "boundingbox": ["46.8204650878906", "46.8653297424316", "6.8076319694519", "6.87874460220337"],
+    "lat": "46.8511962",
+    "lon": "6.8496797",
+    "display_name": "Estavayer-le-Lac, District de la Broye, Fribourg, Switzerland",
+    "class": "boundary",
+    "type": "administrative",
+    "importance": 0.91887989949944,
+    "icon": "http:\/\/nominatim.openstreetmap.org\/images\/mapicons\/poi_boundary_administrative.p.20.png",
+    "address": {
+        "city": "Estavayer-le-Lac",
+        "county": "District de la Broye",
+        "state": "Fribourg",
+        "country": "Switzerland",
+        "country_code": "ch"
+    }
+}, {
+    "place_id": "4321589",
+    "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http:\/\/www.openstreetmap.org\/copyright",
+    "osm_type": "node",
+    "osm_id": "440623252",
+    "boundingbox": ["46.8526458740234", "46.8526496887207", "6.83695554733276", "6.83695602416992"],
+    "lat": "46.8526462",
+    "lon": "6.8369556",
+    "display_name": "Estavayer-le-Lac, Sentier du Goulet, Estavayer-le-Lac, District de la Broye, Fribourg, 1470, Switzerland",
+    "class": "amenity",
+    "type": "ferry_terminal",
+    "importance": 0.501,
+    "address": {
+        "ferry_terminal": "Estavayer-le-Lac",
+        "path": "Sentier du Goulet",
+        "city": "Estavayer-le-Lac",
+        "county": "District de la Broye",
+        "state": "Fribourg",
+        "postcode": "1470",
+        "country": "Switzerland",
+        "country_code": "ch"
+    }
+}, {
+    "place_id": "3664845555",
+    "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http:\/\/www.openstreetmap.org\/copyright",
+    "osm_type": "way",
+    "osm_id": "187377945",
+    "boundingbox": ["46.8444671630859", "46.8446197509766", "6.84281063079834", "6.84311151504517"],
+    "lat": "46.8445432",
+    "lon": "6.84296119166667",
+    "display_name": "Estavayer-le-Lac, Route d'Yverdon, Estavayer-le-Lac, District de la Broye, Fribourg, 1470, Switzerland",
+    "class": "railway",
+    "type": "station",
+    "importance": 0.501,
+    "icon": "http:\/\/nominatim.openstreetmap.org\/images\/mapicons\/transport_train_station2.p.20.png",
+    "address": {
+        "station": "Estavayer-le-Lac",
+        "road": "Route d'Yverdon",
+        "city": "Estavayer-le-Lac",
+        "county": "District de la Broye",
+        "state": "Fribourg",
+        "postcode": "1470",
+        "country": "Switzerland",
+        "country_code": "ch"
+    }
+}, {
+    "place_id": "16045002",
+    "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http:\/\/www.openstreetmap.org\/copyright",
+    "osm_type": "node",
+    "osm_id": "1407522369",
+    "boundingbox": ["46.8292236328125", "46.8292274475098", "6.85050010681152", "6.85050058364868"],
+    "lat": "46.8292251",
+    "lon": "6.8505005",
+    "display_name": "Estavayer-le-Lac, A1, Lully (FR), District de la Broye, Fribourg, 1470, Switzerland",
+    "class": "highway",
+    "type": "motorway_junction",
+    "importance": 0.501,
+    "address": {
+        "road": "Estavayer-le-Lac",
+        "city": "Lully (FR)",
+        "county": "District de la Broye",
+        "state": "Fribourg",
+        "postcode": "1470",
+        "country": "Switzerland",
+        "country_code": "ch"
+    }
+}, {
+    "place_id": "15944871",
+    "licence": "Data \u00a9 OpenStreetMap contributors, ODbL 1.0. http:\/\/www.openstreetmap.org\/copyright",
+    "osm_type": "node",
+    "osm_id": "1446080764",
+    "boundingbox": ["46.8324661254883", "46.8324699401855", "6.86753511428833", "6.86753559112549"],
+    "lat": "46.8324681",
+    "lon": "6.8675354",
+    "display_name": "Estavayer-le-Lac, A1, Les Montets, District de la Broye, Fribourg, 1470, Switzerland",
+    "class": "highway",
+    "type": "motorway_junction",
+    "importance": 0.501,
+    "address": {
+        "road": "Estavayer-le-Lac",
+        "city": "Les Montets",
+        "county": "District de la Broye",
+        "state": "Fribourg",
+        "postcode": "1470",
+        "country": "Switzerland",
+        "country_code": "ch"
+    }
+}]
