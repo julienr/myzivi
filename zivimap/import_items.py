@@ -5,7 +5,7 @@ from django.conf import settings
 #from ziviweb import settings
 #setup_environ(settings)
 
-from zivimap.models import WorkSpec, Address
+from zivimap.models import WorkSpec, Address, DateRange
 import json
 import urlparse
 
@@ -53,6 +53,16 @@ def process_item(item):
     ws.activity_domain = item['activity_domain']
     ws.language = item['lang']
     ws.save()
+    # Update available dates for this workspec. First remove all previous
+    # available dates
+    for dr in ws.daterange_set.all():
+        print dr
+        dr.delete()
+
+    for daterange in item['available_dates']:
+        start, end = daterange
+        dr = DateRange(workspec=ws, start=start, end=end)
+        dr.save()
 ##
 items = map(process_item, items)
 ##
