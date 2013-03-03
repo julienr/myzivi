@@ -1,4 +1,5 @@
 import os
+import sys
 from django.conf import global_settings
 # Django settings for ziviweb project.
 
@@ -161,7 +162,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'root': {
         'level': 'WARNING',
-        'handlers': ['sentry'],
+        'handlers': ['sentry', 'logfile'],
      },
     'filters': {
         'require_debug_false': {
@@ -176,6 +177,14 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
+            'strm': sys.stdout,
+        },
+        'logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/log.txt',
+            'maxBytes': 50000,
+            'backupCount': 2,
         }
         #'mail_admins': {
             #'level': 'ERROR',
@@ -184,25 +193,25 @@ LOGGING = {
         #}
     },
     'loggers': {
-        #'django.request': {
-            #'handlers': ['mail_admins'],
-            #'level': 'ERROR',
-            #'propagate': True,
-        #},
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
         'django.db.backends':{
             'level': 'ERROR',
             'handlers': ['console'],
-            'propagate': False,
+            'propagate': True,
         },
         'raven': {
             'level': 'DEBUG',
             'handlers': ['console'],
-            'propagate': False,
+            'propagate': True,
         },
         'sentry.errors': {
             'level': 'DEBUG',
             'handlers': ['console'],
-            'propagate': False,
+            'propagate': True,
         },
     }
 }
