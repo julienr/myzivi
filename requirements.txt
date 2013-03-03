@@ -7,6 +7,7 @@ scrapy
 shove
 django-webmaster-verification
 -e git+https://github.com/dsc/guess-language.git#egg=guess_language
+python-dateutil==1.5.0 # Sentry breaks if python-dateutil > 2.0
 sentry
 raven
 mock
