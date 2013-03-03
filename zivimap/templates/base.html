@@ -36,7 +36,7 @@
                   {% get_available_languages as languages %}
                   {% for lang_code, lang_name in languages %}
                     {% language lang_code %}
-                      <a class="nav-small" href="{% url zivimap.views.index %}">{{ lang_name }}</a>
+                      <a class="nav-small" href="{% url 'zivimap.views.index' %}">{{ lang_name }}</a>
                       {% if not forloop.last %}
                        |
                       {% endif %}
