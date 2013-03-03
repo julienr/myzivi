@@ -3,7 +3,7 @@ from django.core import serializers
 from django import forms
 from zivimap.api import *
 from zivimap.models import Address, WorkSpec, DateRange
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.conf import settings
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
@@ -33,7 +33,7 @@ class SearchForm(forms.Form):
                 }),
             label=_('Date range'))
 
-def build_workspecs_filter(search_form):
+def search_workspecs(search_form):
     """Return a filter dict based on SearchForm cleaned_data"""
     assert search_form.is_valid()
     cd = search_form.cleaned_data
@@ -49,10 +49,18 @@ def build_workspecs_filter(search_form):
         start_date, end_date = date_range.split('-')
         start_date = datetime.strptime(start_date.strip(), '%d/%m/%Y').date()
         end_date = datetime.strptime(end_date.strip(), '%d/%m/%Y').date()
-        Qfilters &= Q(daterange__start__gte=start_date)
-        Qfilters &= Q(daterange__end__lte=end_date)
-    return Qfilters
+        ranges = DateRange.objects.filter(start__gte=start_date,
+                                          end__lte=end_date)
+        ranges = ranges.values('workspec_id').annotate()
 
+        # ID of workspecs that don't have a daterange
+        no_ranges = WorkSpec.objects.annotate(rc=Count('daterange')).filter(rc=0).values('phid').annotate()
+        Qfilters &= Q(phid__in=ranges) | Q(phid__in=no_ranges)
+
+    # Need an order by here, otherwise, the clustering will change based
+    # on the ordering of the WorkSpec set, which might be confusing (like
+    # when searching without date range and with the whole date range)
+    return WorkSpec.objects.filter(Qfilters).order_by('phid')
 
 def sitemap(request):
     return render(request, 'sitemap.xml')
@@ -67,8 +75,7 @@ def index(request):
         cd = form.cleaned_data
         addresses = all_resources(request, AddressResource(),
                                   Address.objects.all())
-        Qws = build_workspecs_filter(form)
-        wsq = WorkSpec.objects.filter(Qws)
+        wsq = search_workspecs(form)
         ws = all_resources(request, MapSearchResource(), wsq)
         first_time_message = not request.session.get('visited', False)
         request.session['visited'] = True
