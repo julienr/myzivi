@@ -2,12 +2,13 @@ from django.shortcuts import render, redirect
 from django.core import serializers
 from django import forms
 from zivimap.api import *
-from zivimap.models import Address, WorkSpec
+from zivimap.models import Address, WorkSpec, DateRange
 from django.db.models import Q
 from django.conf import settings
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 import json
+from datetime import datetime
 
 def all_resources(request, resource, queryset):
     objects = []
@@ -26,6 +27,11 @@ class SearchForm(forms.Form):
             choices=WorkSpec.LANG_CHOICES,
             widget=forms.CheckboxSelectMultiple,
             label=_('Languages'))
+    date_range = forms.CharField(required=False,
+            widget=forms.TextInput(attrs={'class':'daterange',
+                #'readonly':'readonly'
+                }),
+            label=_('Date range'))
 
 def build_workspecs_filter(search_form):
     """Return a filter dict based on SearchForm cleaned_data"""
@@ -38,6 +44,13 @@ def build_workspecs_filter(search_form):
     languages = cd['languages']
     if len(languages) > 0:
         Qfilters &= Q(language__in=languages)
+    date_range = cd['date_range']
+    if len(date_range) > 0:
+        start_date, end_date = date_range.split('-')
+        start_date = datetime.strptime(start_date.strip(), '%d/%m/%Y').date()
+        end_date = datetime.strptime(end_date.strip(), '%d/%m/%Y').date()
+        Qfilters &= Q(daterange__start__gte=start_date)
+        Qfilters &= Q(daterange__end__lte=end_date)
     return Qfilters
 
 
@@ -52,7 +65,6 @@ def index(request):
     form = SearchForm(request.GET)
     if form.is_valid():
         cd = form.cleaned_data
-        domains = cd['domains']
         addresses = all_resources(request, AddressResource(),
                                   Address.objects.all())
         Qws = build_workspecs_filter(form)
@@ -60,9 +72,12 @@ def index(request):
         ws = all_resources(request, MapSearchResource(), wsq)
         first_time_message = not request.session.get('visited', False)
         request.session['visited'] = True
+        date_min, date_max = DateRange.get_min_max()
         context = {'addresses': addresses,
                    'workspecs' : ws,
                    'search_form' : form,
+                   'daterange_min' : date_min,
+                   'daterange_max' : date_max,
                    'first_time_message' : first_time_message}
         return render(request, 'index.html', context)
     else:

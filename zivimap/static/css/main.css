@@ -71,7 +71,7 @@ ul#search_form {
     margin-bottom: 5px;
 }
 
-ul#search_form li {
+ul#search_form li ul li {
     display: inline-block;
     padding-right: 10px;
 }

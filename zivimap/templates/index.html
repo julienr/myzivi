@@ -20,6 +20,17 @@
     ADDRESS_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="address" %}";
     SEARCH_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="search" %}";
 
+    // Daterange picker
+    var dateMin = Date.parse('{{daterange_min|safe}}');
+    var dateMax = Date.parse('{{daterange_max|safe}}');
+    $('.daterange').daterangepicker({
+        minDate: dateMin,
+        maxDate: dateMax,
+        startDate: dateMin,
+        endDate: dateMax,
+        format: 'dd/MM/yyyy'});
+    $('.daterange').data('daterangepicker').notify();
+
     var _workspecs = JSON.parse("{{ workspecs|escapejs }}");
     var _addresses = JSON.parse("{{ addresses|escapejs }}");
     var App = {};
@@ -38,6 +49,7 @@
 {% endblock %}
 
 {% block content %}
+
 <div id="map_canvas"></div>
 
 <div id="filters_overlay">

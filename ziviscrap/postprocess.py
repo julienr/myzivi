@@ -26,8 +26,8 @@ def filter_duplicates(items):
 ##
 def parse_date_range(txt):
     start, end = txt.strip().split('-')
-    start = datetime.strptime(start, '%d.%m.%Y').isoformat()
-    end = datetime.strptime(end, '%d.%m.%Y').isoformat()
+    start = datetime.strptime(start, '%d.%m.%Y').date().isoformat()
+    end = datetime.strptime(end, '%d.%m.%Y').date().isoformat()
     return (start, end)
 
 def parse_item(item):

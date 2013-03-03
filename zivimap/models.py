@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.core.cache import cache
+from django.db.models import Min, Max
 
 class Address(models.Model):
     canton = models.CharField(max_length=50)
@@ -49,3 +51,12 @@ class DateRange(models.Model):
     workspec = models.ForeignKey(WorkSpec)
     start = models.DateField(db_index=True)
     end = models.DateField(db_index=True)
+
+    @classmethod
+    def get_min_max(cls):
+        CACHE_KEY = 'daterange_min_max'
+        m = cache.get(CACHE_KEY)
+        if m is None:
+            m = DateRange.objects.all().aggregate(Min('start'), Max('end'))
+            cache.set(CACHE_KEY, m)
+        return m['start__min'], m['end__max']

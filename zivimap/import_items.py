@@ -56,7 +56,6 @@ def process_item(item):
     # Update available dates for this workspec. First remove all previous
     # available dates
     for dr in ws.daterange_set.all():
-        print dr
         dr.delete()
 
     for daterange in item['available_dates']:
