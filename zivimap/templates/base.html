@@ -9,6 +9,8 @@
           rel="stylesheet" media="screen">
     <link href="{%static 'css/main.css'%}"
           rel="stylesheet" media="screen">
+    <link href="{%static 'css/daterangepicker.css'%}"
+          rel="stylesheet" media="screen">
     <link href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css"
           rel="stylesheet" media="screen">
           <title>myzivi.ch | {% trans 'swiss civilian service search' %}</title>
@@ -36,7 +38,7 @@
                   {% get_available_languages as languages %}
                   {% for lang_code, lang_name in languages %}
                     {% language lang_code %}
-                      <a class="nav-small" href="{% url zivimap.views.index %}">{{ lang_name }}</a>
+                      <a class="nav-small" href="{% url 'zivimap.views.index' %}">{{ lang_name }}</a>
                       {% if not forloop.last %}
                        |
                       {% endif %}
@@ -94,6 +96,8 @@
     {% js_lib 'bootstrap.min.js' %}
     {% js_lib 'underscore-min.js' %}
     {% js_lib 'backbone-min.js' %}
+    {% js_lib 'date.js' %}
+    {% js_lib 'daterangepicker.js' %}
     <script type="text/javascript" src="{{ STATIC_URL }}js/backbone-tastypie.js"></script>
 
     <!-- Google analytics -->

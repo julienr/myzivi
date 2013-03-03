@@ -2,6 +2,7 @@ _data/
 env/
 *.pyc
 *.mo
+*~
 zividb
 ziviweb/static/
 tunnel_sentry.sh

@@ -53,6 +53,8 @@ SERIALIZATION_MODULES = {
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
+# Don't use l10n, specify date format ourselves (as we want swiss formatting,
+# regardless of the UI language)
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.

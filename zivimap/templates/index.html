@@ -16,9 +16,20 @@
 
 <script type="text/javascript">
     // TODO: Do clean bootstraping http://backbonejs.org/#FAQ-bootstrap
-    WORKSPEC_API = "{% url api_dispatch_list api_name="v1" resource_name="workspec" %}";
-    ADDRESS_API = "{% url api_dispatch_list api_name="v1" resource_name="address" %}";
-    SEARCH_API = "{% url api_dispatch_list api_name="v1" resource_name="search" %}";
+    WORKSPEC_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="workspec" %}";
+    ADDRESS_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="address" %}";
+    SEARCH_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="search" %}";
+
+    // Daterange picker
+    var dateMin = Date.parse('{{daterange_min|safe}}');
+    var dateMax = Date.parse('{{daterange_max|safe}}');
+    $('.daterange').daterangepicker({
+        minDate: dateMin,
+        maxDate: dateMax,
+        startDate: dateMin,
+        endDate: dateMax,
+        format: 'dd/MM/yyyy'});
+    $('.daterange').data('daterangepicker').notify();
 
     var _workspecs = JSON.parse("{{ workspecs|escapejs }}");
     var _addresses = JSON.parse("{{ addresses|escapejs }}");
@@ -38,12 +49,13 @@
 {% endblock %}
 
 {% block content %}
+
 <div id="map_canvas"></div>
 
 <div id="filters_overlay">
     <div id="filters_container">
         <h4>{% trans 'Search options' %}</h4>
-        <form action="{% url zivimap.views.index %}" method="GET">
+        <form action="{% url 'zivimap.views.index' %}" method="GET">
             <ul id="search_form">
                 {{ search_form.as_ul }}
             </ul>
