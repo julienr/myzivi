@@ -34,7 +34,9 @@
         startDate: dateMin,
         endDate: dateMax,
         format: 'dd/MM/yyyy'});
-    $('.daterange').data('daterangepicker').notify();
+    /*$('.daterange').data('daterangepicker').notify();*/
+    $('.datepicker').datepicker({
+        formatDate: 'dd/MM/yyyy'});
 
     var _workspecs = JSON.parse("{{ workspecs|escapejs }}");
     var _addresses = JSON.parse("{{ addresses|escapejs }}");

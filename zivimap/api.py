@@ -2,7 +2,7 @@ import ziviweb.settings as settings
 from django.core.urlresolvers import reverse
 from zivimap.models import WorkSpec, Address, DateRange
 from django.db.models import Q, Count
-from tastypie.resources import ModelResource, Resource, Bundle
+from tastypie.resources import ModelResource, Resource, Bundle, ALL
 from tastypie import fields, utils
 from datetime import datetime
 
@@ -30,13 +30,27 @@ class WorkSpecSearchResource(ModelResource):
         max_limit = 0
         fields = ['address_id', 'shortname', 'raw_phid', 'phid']
         filtering = {
-            'domains': ('in',),
-            'languages': ('in',),
+            'activity_domain': ('in',),
+            'language': ('in',),
         }
 
     def dehydrate(self, bundle):
         bundle.data['addrid'] = bundle.obj.address_id
         return bundle
+
+    def build_filters(self, filters=None):
+        if filters is None:
+            filters = {}
+        orm_filters = super(WorkSpecSearchResource, self).build_filters(filters)
+        # By default, tastypie doesn't allow to filter on fields that are
+        # not in Meta.fields. Overwrite this
+        lang_filters = filters.getlist('language__in')
+        if lang_filters:
+            orm_filters['language__in'] = lang_filters
+        domain_filters = filters.getlist('activity_domain__in')
+        if domain_filters:
+            orm_filters['activity_domain__in'] = domain_filters
+        return orm_filters
 
     def apply_filters(self, request, applicable_filters):
         res = super(WorkSpecSearchResource, self).apply_filters(request,
