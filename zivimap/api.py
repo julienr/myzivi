@@ -1,8 +1,10 @@
 import ziviweb.settings as settings
 from django.core.urlresolvers import reverse
-from zivimap.models import WorkSpec, Address
+from zivimap.models import WorkSpec, Address, DateRange
+from django.db.models import Q, Count
 from tastypie.resources import ModelResource, Resource, Bundle
 from tastypie import fields, utils
+from datetime import datetime
 
 class AddressResource(ModelResource):
     class Meta:
@@ -11,44 +13,56 @@ class AddressResource(ModelResource):
         include_resource_uri = False
         limit = 0
 
-class MapSearchResource(ModelResource):
+class WorkSpecSearchResource(ModelResource):
     """
     This is a specialized resource that returns a list of workspecs for a given
     query. The workspecs description is shortened to only a few fields to
-    save bandwidth.
+    reduce response size
     """
     class Meta:
         queryset = WorkSpec.objects.all()
-        resource_name = 'search'
+        resource_name = 'workspec_search'
         allowed_methods = ['get']
         include_resource_uri = False
         # Without that, resource_uri is empty in the view
         api_name = settings.API_VERSION
         limit = 0
-        fields = ['address_id', 'shortname', 'raw_phid']
+        max_limit = 0
+        fields = ['address_id', 'shortname', 'raw_phid', 'phid']
+        filtering = {
+            'domains': ('in',),
+            'languages': ('in',),
+        }
 
     def dehydrate(self, bundle):
         bundle.data['addrid'] = bundle.obj.address_id
         return bundle
 
-    def build_filters(self, filters=None):
-        if filters is None:
-            filters = {}
-        orm_filters = super(MapSearchResource, self).build_filters(filters)
+    def apply_filters(self, request, applicable_filters):
+        res = super(WorkSpecSearchResource, self).apply_filters(request,
+                applicable_filters)
+        # Handle complex filters here
+        start_min = request.GET.get('start_min', None)
+        end_max = request.GET.get('end_max', None)
+        if start_min is not None or end_max is not None:
+            drfilters = Q()
+            if start_min is not None:
+                start_date = datetime.strptime(start_min.strip(),
+                                               '%Y-%m-%d').date()
+                drfilters &= Q(start__gte=start_date)
+            if end_max is not None:
+                end_date = datetime.strptime(end_max.strip(),
+                                             '%Y-%m-%d').date()
+                drfilters &= Q(end__lte=end_date)
+            ranges = DateRange.objects.filter(drfilters).values('workspec_id')\
+                                                        .annotate()
+            # ID of workspecs that don't have a daterange
+            # TODO: This should be merged in the subsequent workspec query
+            no_ranges = WorkSpec.objects.annotate(rc=Count('daterange'))\
+                                .filter(rc=0).values('phid').annotate()
+            res = res.filter(Q(phid__in=ranges) | Q(phid__in=no_ranges))
+        return res
 
-        # We accept a "latlngbb=47.365,8.783,47.367,8.785" parameter
-        # specifying a latlng bounding box (as the one returned by google maps
-        # getBounds())
-        if 'latlngbb' in filters:
-            latlngbb = filters['latlngbb']
-            swlat, swlng, nelat, nelng = map(float, latlngbb.split(','))
-
-            assert swlat < nelat
-            assert swlng < nelng
-            orm_filters['address__latitude__range'] = (swlat, nelat)
-            orm_filters['address__longitude__range'] = (swlng, nelng)
-
-        return orm_filters
 
 class WorkSpecResource(ModelResource):
     address = fields.ToOneField(AddressResource, 'address', full=True)

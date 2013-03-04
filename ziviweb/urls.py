@@ -11,7 +11,7 @@ import ziviweb.settings as settings
 v1_api = Api(api_name=settings.API_VERSION)
 v1_api.register(AddressResource())
 v1_api.register(WorkSpecResource())
-v1_api.register(MapSearchResource())
+v1_api.register(WorkSpecSearchResource())
 
 print v1_api.urls
 

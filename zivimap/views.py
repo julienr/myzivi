@@ -76,7 +76,7 @@ def index(request):
         addresses = all_resources(request, AddressResource(),
                                   Address.objects.all())
         wsq = search_workspecs(form)
-        ws = all_resources(request, MapSearchResource(), wsq)
+        ws = all_resources(request, WorkSpecSearchResource(), wsq)
         first_time_message = not request.session.get('visited', False)
         request.session['visited'] = True
         date_min, date_max = DateRange.get_min_max()

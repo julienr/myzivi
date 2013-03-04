@@ -162,7 +162,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'root': {
         'level': 'WARNING',
-        'handlers': ['sentry', 'logfile'],
+        'handlers': ['sentry', 'logfile', 'console'],
      },
     'filters': {
         'require_debug_false': {

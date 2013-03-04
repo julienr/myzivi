@@ -16,10 +16,15 @@
 
 <script type="text/javascript">
     // TODO: Do clean bootstraping http://backbonejs.org/#FAQ-bootstrap
+{% comment %}
     WORKSPEC_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="workspec" %}";
     ADDRESS_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="address" %}";
     SEARCH_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="search" %}";
 
+{% endcomment %}
+    WORKSPEC_API = "";
+    ADDRESS_API = "";
+    SEARCH_API = "";
     // Daterange picker
     var dateMin = Date.parse('{{daterange_min|safe}}');
     var dateMax = Date.parse('{{daterange_max|safe}}');
