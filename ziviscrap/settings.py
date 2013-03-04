@@ -31,16 +31,17 @@ FEED_URI = 'file://' + os.path.join(DATA_DIR, 'items.json')
 LOG_FILE = os.path.join(DATA_DIR, 'log.txt')
 LOG_LEVEL = 'DEBUG'
 
-DOWNLOAD_DELAY = 0.1
+DOWNLOAD_DELAY = 0.5
 
 RETRY_ENABLED = True
 RETRY_TIMES = 5
-
-# Disable redirect because the website redirects us on 500 error
-REDIRECT_ENABLED = False
 # Retry 500 and 404 because sometimes, temporary errors seem to cause the
 # server to return 404, but the page exists on next try
 RETRY_HTTP_CODES = [500, 503, 504, 400, 404, 408, 300, 307]
+
+
+# Disable redirect because the website redirects us on 500 error
+REDIRECT_ENABLED = False
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ziviscrap (+http://www.yourdomain.com)'
