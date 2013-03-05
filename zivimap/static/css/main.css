@@ -50,6 +50,21 @@ a.nav-small:hover {
   height: 100%;
 }
 
+#loading-inner {
+  position: relative;
+  left: -50%;
+  z-index: 5;
+  margin-top: 20px;
+  background-color: #FFF;
+  text-align: center;
+  padding: 10px;
+}
+
+#loading h3 {
+  padding: 0;
+  margin: 0;
+}
+
 #filters_overlay {
   position: absolute;
   left: 50px;

@@ -19,7 +19,8 @@
     SEARCH_API = "{{ workspec_search_url }}";
 
     var App = {};
-    $(initMap(App));
+    newInitMap(App);
+    //$(initMap(App));
 </script>
 
 <!-- Social stuff -->
@@ -34,6 +35,10 @@
 {% endblock %}
 
 {% block content %}
+<!-- horizontally centered loading -->
+<div id="loading" style="position:absolute; left: 50%;">
+  <div id="loading-inner"><h3><img src="{% static 'img/ajax-loader.gif' %}"> Loading</h3></div>
+</div>
 
 <div id="map_canvas"></div>
 
