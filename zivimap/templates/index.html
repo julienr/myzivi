@@ -42,11 +42,7 @@
         <h4>{% trans 'Search options' %}</h4>
         <form id="search_form" action="{% url 'zivimap.views.index' %}" method="GET">
             {% include "search_form.html" with form=search_form %}
-            {% comment %}
-            <ul id="search_form">
-                {{ search_form.as_ul }}
-            </ul>
-            {% endcomment %}
+
             <input class="btn btn-primary" type="submit" value="{% trans 'Search' %}" />
         </form>
         <!-- Social buttons -->

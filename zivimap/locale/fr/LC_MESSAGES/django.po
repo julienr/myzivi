@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-18 17:50+0100\n"
+"POT-Creation-Date: 2013-03-05 12:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,51 +18,60 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 
-#: models.py:30
+#: models.py:32
 msgid "Health"
 msgstr "Santé"
 
-#: models.py:30
+#: models.py:32
 msgid "Social"
 msgstr "Social"
 
-#: models.py:31
+#: models.py:33
 msgid "Culture"
 msgstr "Culture"
 
-#: models.py:31
+#: models.py:33
 msgid "Nature protection"
 msgstr "Protection de la nature"
 
-#: models.py:32
+#: models.py:34
 msgid "Forest work"
 msgstr "Travaux forestiers"
 
-#: models.py:32
+#: models.py:34
 msgid "Agriculture"
 msgstr "Agriculture"
 
-#: models.py:33
+#: models.py:35
 msgid "Development & cooperation"
 msgstr "Développement & coopéeration"
 
-#: models.py:34
+#: models.py:36
 msgid "Disasters help"
 msgstr "Aide en cas de catastrophe"
 
-#: views.py:24
+#: views.py:29 templates/search_form.html:9
 msgid "Domains"
 msgstr "Domaines"
 
-#: views.py:28
+#: views.py:33 templates/search_form.html:15
 msgid "Languages"
 msgstr "Langue"
 
-#: templates/base.html:14 templates/base.html.py:26
-msgid "swiss civilian service search"
-msgstr "recherche d'affectations pour le service civil suisse"
+#: views.py:41 templates/search_form.html:21
+msgid "Earliest start"
+msgstr "Début au plus tôt"
 
-#: templates/base.html:58
+#: views.py:45 templates/search_form.html:27
+msgid "Latest end"
+msgstr "Fin au plus tard"
+
+#: templates/base.html:16 templates/base.html.py:28
+#, fuzzy
+msgid "(non-official) swiss civilian service search"
+msgstr "recherche d'affectations pour le service civil suisse (non-officiel)"
+
+#: templates/base.html:60
 #, python-format
 msgid ""
 "\n"
@@ -86,10 +95,13 @@ msgstr ""
 "      Pour plus d'informations, cliques sur \"About\".\n"
 "      "
 
-#: templates/index.html:45
+#: templates/index.html:42
 msgid "Search options"
 msgstr "Options de recherche"
 
-#: templates/index.html:50
+#: templates/index.html:46
 msgid "Search"
 msgstr "Chercher"
+
+#~ msgid "swiss civilian service search"
+#~ msgstr "recherche d'affectations pour le service civil suisse"
