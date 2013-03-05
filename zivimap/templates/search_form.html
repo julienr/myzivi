@@ -1,0 +1,32 @@
+{% load i18n %}
+{% comment %}
+{{ form.as_ul }}
+{% endcomment %}
+
+<ul id="search_form">
+    {{ form.non_field_errors }}
+    <li>
+        <label for="id_domains_0">{% trans 'Domains' %}</label>
+        <ul>
+            {{ form.domains }}
+        </ul>
+    </li>
+    <li>
+        <label for="id_languages_0">{% trans 'Languages' %}</label>
+        <ul>
+            {{ form.languages }}
+        </ul>
+    </li>
+    <li>
+        <label for="id_start_min_month">{% trans 'Earliest start' %}</label>
+        <ul>
+            {{ form.start_min }}
+        </ul>
+    </li>
+    <li>
+        <label for="id_end_max_month">{% trans 'Latest end' %}</label>
+        <ul>
+            {{ form.end_max }}
+        </ul>
+    </li>
+</ul>
