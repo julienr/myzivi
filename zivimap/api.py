@@ -12,6 +12,7 @@ class AddressResource(ModelResource):
         resource_name = 'address'
         include_resource_uri = False
         limit = 0
+        max_limit = 0
 
 class WorkSpecSearchResource(ModelResource):
     """
