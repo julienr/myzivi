@@ -15,33 +15,11 @@
 </script>
 
 <script type="text/javascript">
-    // TODO: Do clean bootstraping http://backbonejs.org/#FAQ-bootstrap
-{% comment %}
-    WORKSPEC_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="workspec" %}";
-    ADDRESS_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="address" %}";
-    SEARCH_API = "{% url 'api_dispatch_list' api_name="v1" resource_name="search" %}";
+    ADDRESS_API = "{{ address_url }}";
+    SEARCH_API = "{{ workspec_search_url }}";
 
-{% endcomment %}
-    WORKSPEC_API = "";
-    ADDRESS_API = "";
-    SEARCH_API = "";
-    // Daterange picker
-    var dateMin = Date.parse('{{daterange_min|safe}}');
-    var dateMax = Date.parse('{{daterange_max|safe}}');
-    $('.daterange').daterangepicker({
-        minDate: dateMin,
-        maxDate: dateMax,
-        startDate: dateMin,
-        endDate: dateMax,
-        format: 'dd/MM/yyyy'});
-    /*$('.daterange').data('daterangepicker').notify();*/
-    $('.datepicker').datepicker({
-        formatDate: 'dd/MM/yyyy'});
-
-    var _workspecs = JSON.parse("{{ workspecs|escapejs }}");
-    var _addresses = JSON.parse("{{ addresses|escapejs }}");
     var App = {};
-    $(initMap(_workspecs, _addresses, App));
+    $(initMap(App));
 </script>
 
 <!-- Social stuff -->
@@ -62,13 +40,15 @@
 <div id="filters_overlay">
     <div id="filters_container">
         <h4>{% trans 'Search options' %}</h4>
-        <form action="{% url 'zivimap.views.index' %}" method="GET">
+        <form id="search_form" action="{% url 'zivimap.views.index' %}" method="GET">
+            {% include "search_form.html" with form=search_form %}
+            {% comment %}
             <ul id="search_form">
                 {{ search_form.as_ul }}
             </ul>
+            {% endcomment %}
             <input class="btn btn-primary" type="submit" value="{% trans 'Search' %}" />
         </form>
-
         <!-- Social buttons -->
         <div class="fb-like" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false" data-font="arial"></div>
 

@@ -84,3 +84,10 @@ ul#search_form label {
     display: inline;
 }
 
+#search_form select.select_month {
+    width: 100px;
+}
+
+#search_form select.select_year {
+    width: 100px;
+}

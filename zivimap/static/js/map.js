@@ -14,9 +14,8 @@ function url_from_phid(phid) {
     return ZIVI_WS_BASE + '&phid=' + phid;
 }
 
-// initialWorkspecs is a list of JSON workspecs
 // N is the namespace to use for this app
-function initMap(initialWorkspecs, initialAddresses, N) {
+function initMap(N) {
     N.WorkSpec = Backbone.Model.extend({
         urlRoot: SEARCH_API,
     });
@@ -214,7 +213,7 @@ function initMap(initialWorkspecs, initialAddresses, N) {
         },
     });
 
-    N.addresses = new N.AddressList(initialAddresses);
+    N.addresses = new N.AddressList();
     N.workspecs = new N.WorkSpecList();
 
     //N.listview = new N.ListView({
@@ -226,5 +225,12 @@ function initMap(initialWorkspecs, initialAddresses, N) {
         addresses: N.addresses,
     });
 
-    N.workspecs.reset(initialWorkspecs);
+    // Workspecs depends on all addresses being loaded (otherwise MapView will
+    // fail). So chain them
+    // TODO: Need to handle potential ajax errors
+    N.addresses.fetch({success:
+        function(collection, response) {
+            N.workspecs.fetch();
+        }
+    });
 }
